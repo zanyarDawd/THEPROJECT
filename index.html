@@ -6,27 +6,17 @@
     <title>QC Allergen Matrix - Green Iraq</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- بەستنەوەی فەرمی بە Firebase -->
+    <!-- بەستنەوەی فەرمی بە Firebase و Auth -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <style>
         :root {
-            --primary: #059669; 
-            --primary-hover: #047857;
-            --primary-light: #d1fae5;
-            --accent: #2563eb; 
-            
-            --bg-body: #f1f5f9;
-            --bg-surface: #ffffff;
-            --bg-input: #f8fafc;
-            
-            --text-h: #0f172a;
-            --text-p: #475569;
-            --text-mute: #94a3b8;
-            
-            --border: #e2e8f0;
-            --border-focus: #94a3b8;
+            --primary: #059669; --primary-hover: #047857; --primary-light: #d1fae5; --accent: #2563eb; 
+            --bg-body: #f1f5f9; --bg-surface: #ffffff; --bg-input: #f8fafc;
+            --text-h: #0f172a; --text-p: #475569; --text-mute: #94a3b8;
+            --border: #e2e8f0; --border-focus: #94a3b8;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
             --shadow-lg: 0 15px 35px -5px rgba(15, 23, 42, 0.08);
@@ -37,290 +27,121 @@
         }
 
         [data-theme="dark"] {
-            --primary: #10b981;
-            --primary-hover: #34d399;
-            --primary-light: rgba(16, 185, 129, 0.15);
-            --accent: #60a5fa;
-            
-            --bg-body: #0b1120;
-            --bg-surface: #1e293b;
-            --bg-input: #0f172a;
-            
-            --text-h: #f8fafc;
-            --text-p: #cbd5e1;
-            --text-mute: #64748b;
-            
-            --border: #334155;
-            --border-focus: #475569;
-            
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
-            --shadow-lg: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
-            
+            --primary: #10b981; --primary-hover: #34d399; --primary-light: rgba(16, 185, 129, 0.15); --accent: #60a5fa;
+            --bg-body: #0b1120; --bg-surface: #1e293b; --bg-input: #0f172a;
+            --text-h: #f8fafc; --text-p: #cbd5e1; --text-mute: #64748b;
+            --border: #334155; --border-focus: #475569;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4); --shadow-lg: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
             --wash-none-bg: rgba(16, 185, 129, 0.1); --wash-none-text: #34d399; 
             --wash-air-bg: rgba(59, 130, 246, 0.1); --wash-air-text: #60a5fa; 
             --wash-full-bg: rgba(239, 68, 68, 0.1); --wash-full-text: #f87171; 
         }
 
         * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif; 
-            color: var(--text-p); 
-            margin: 0; padding: 40px 15px; 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; line-height: 1.6;
-            background-color: var(--bg-body);
-            background-image: radial-gradient(var(--border) 1px, transparent 1px);
-            background-size: 24px 24px;
-            transition: background-color 0.3s ease;
-        }
-
+        body { font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif; color: var(--text-p); margin: 0; padding: 40px 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; line-height: 1.6; background-color: var(--bg-body); background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 24px 24px; transition: background-color 0.3s ease; }
         .main-wrapper { width: 100%; max-width: 740px; margin: 0 auto; }
-
-        .container {
-            background: var(--bg-surface); 
-            padding: 45px; 
-            border-radius: 24px;
-            box-shadow: var(--shadow-lg); 
-            border: 1px solid var(--border);
-            position: relative;
-            width: 100%;
-        }
-        
-        .container::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            border-top-left-radius: 24px; border-top-right-radius: 24px;
-        }
-
-        .header-section {
-            display: flex; justify-content: space-between; align-items: flex-start; 
-            margin-bottom: 30px; border-bottom: 2px solid var(--bg-body);
-            padding-bottom: 20px;
-        }
-
-        .brand-info h1 { 
-            color: var(--text-h); font-size: 24px; margin: 0 0 4px 0; font-weight: 900; 
-            letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; 
-        }
+        .container { background: var(--bg-surface); padding: 45px; border-radius: 24px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); position: relative; width: 100%; }
+        .container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--accent), var(--primary)); border-top-left-radius: 24px; border-top-right-radius: 24px; }
+        .header-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid var(--bg-body); padding-bottom: 20px; }
+        .brand-info h1 { color: var(--text-h); font-size: 24px; margin: 0 0 4px 0; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
         .brand-info h1 svg { width: 28px; height: 28px; color: var(--primary); flex-shrink: 0; }
-        .brand-info span { 
-            color: var(--text-mute); font-size: 13px; font-weight: 700; 
-            text-transform: uppercase; letter-spacing: 1.5px;
-        }
-
+        .brand-info span { color: var(--text-mute); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
         .controls { display: flex; gap: 10px; }
-        .icon-btn {
-            background: var(--bg-input); border: 1px solid var(--border); 
-            color: var(--text-h); font-size: 18px; width: 42px; height: 42px; 
-            border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease; box-shadow: var(--shadow-sm); flex-shrink: 0;
-        }
+        .icon-btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-h); font-size: 18px; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: var(--shadow-sm); flex-shrink: 0; }
         .icon-btn:hover { background: var(--border); transform: scale(1.05); color: var(--primary); }
         .icon-btn.danger:hover { color: var(--wash-full-border); }
-
-        .lang-switcher { 
-            display: flex; background: var(--bg-input); padding: 4px; 
-            border-radius: 14px; margin-bottom: 35px; border: 1px solid var(--border); 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            overflow-x: auto;
-        }
-        .lang-btn { 
-            flex: 1; padding: 10px; border: none; background: transparent; 
-            font-family: 'Vazirmatn', sans-serif; font-size: 14px; font-weight: 700; 
-            color: var(--text-mute); border-radius: 10px; cursor: pointer; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
-        }
+        .lang-switcher { display: flex; background: var(--bg-input); padding: 4px; border-radius: 14px; margin-bottom: 35px; border: 1px solid var(--border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); overflow-x: auto; }
+        .lang-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Vazirmatn', sans-serif; font-size: 14px; font-weight: 700; color: var(--text-mute); border-radius: 10px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
         .lang-btn:hover:not(.active) { color: var(--text-h); }
-        .lang-btn.active { 
-            background: var(--bg-surface); color: var(--text-h); 
-            box-shadow: var(--shadow-md); border: 1px solid var(--border);
-        }
-
+        .lang-btn.active { background: var(--bg-surface); color: var(--text-h); box-shadow: var(--shadow-md); border: 1px solid var(--border); }
         .title-area { margin-bottom: 30px; text-align: right; }
         [dir="ltr"] .title-area { text-align: left; }
-        
         .title-area h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; color: var(--text-h); line-height: 1.4; }
         .title-area p { margin: 0; font-size: 14.5px; color: var(--text-p); font-weight: 500; line-height: 1.5; }
-
         .form-group { margin-bottom: 22px; width: 100%; }
-        label { 
-            display: flex; align-items: center; gap: 8px; margin-bottom: 8px; 
-            font-weight: 700; font-size: 14.5px; color: var(--text-h); 
-        }
+        label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 700; font-size: 14.5px; color: var(--text-h); }
         label svg { color: var(--primary); width: 18px; height: 18px; flex-shrink: 0; }
-        
-        select, input[type="text"] { 
-            width: 100%; padding: 16px 20px; 
-            border: 2px solid var(--border); border-radius: 14px; 
-            font-family: 'Vazirmatn', sans-serif; font-size: 15px; font-weight: 600; 
-            background-color: var(--bg-input); color: var(--text-h); 
-            outline: none; transition: all 0.2s ease; box-shadow: var(--shadow-sm);
-        }
-        select {
-            cursor: pointer; appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
-            background-repeat: no-repeat; background-position: left 1rem center; background-size: 1em; 
-        }
+        select, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 16px 20px; border: 2px solid var(--border); border-radius: 14px; font-family: 'Vazirmatn', sans-serif; font-size: 15px; font-weight: 600; background-color: var(--bg-input); color: var(--text-h); outline: none; transition: all 0.2s ease; box-shadow: var(--shadow-sm); }
+        select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 1rem center; background-size: 1em; }
         [dir="ltr"] select { background-position: right 1rem center; }
-        [data-theme="dark"] select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
-        }
-        select:hover, input[type="text"]:hover { border-color: var(--border-focus); }
-        select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
-        
+        [data-theme="dark"] select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        select:hover, input[type="text"]:hover, input[type="email"]:hover, input[type="password"]:hover { border-color: var(--border-focus); }
+        select:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
         #productLine { background-color: var(--primary-light); border-color: transparent; color: var(--primary-hover); }
         [data-theme="dark"] #productLine { color: var(--primary); }
-
-        .btn-check, .btn-primary { 
-            width: 100%; background: var(--text-h); 
-            color: var(--bg-surface); padding: 18px; border: none; border-radius: 14px; 
-            font-family: 'Vazirmatn', sans-serif; font-size: 17px; font-weight: 800; 
-            cursor: pointer; margin-top: 15px; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: all 0.2s ease; box-shadow: var(--shadow-md);
-        }
+        .btn-check, .btn-primary { width: 100%; background: var(--text-h); color: var(--bg-surface); padding: 18px; border: none; border-radius: 14px; font-family: 'Vazirmatn', sans-serif; font-size: 17px; font-weight: 800; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s ease; box-shadow: var(--shadow-md); }
         .btn-check:hover, .btn-primary:hover { background: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
         .btn-check:active, .btn-primary:active { transform: translateY(0); }
-        
         .btn-danger { background: var(--wash-full-border); }
         .btn-danger:hover { background: #b91c1c; }
-
         [dir="rtl"] .btn-check:hover svg { transform: translateX(-4px); }
         [dir="ltr"] .btn-check:hover svg { transform: translateX(4px); }
-
         @keyframes slideDown { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-
-        #resultBox { 
-            margin-top: 35px; padding: 25px; border-radius: 16px; display: none; 
-            animation: slideDown 0.3s ease-out forwards; 
-            border: 2px solid var(--border);
-            box-shadow: var(--shadow-md);
-            overflow-wrap: break-word;
-        }
+        #resultBox { margin-top: 35px; padding: 25px; border-radius: 16px; display: none; animation: slideDown 0.3s ease-out forwards; border: 2px solid var(--border); box-shadow: var(--shadow-md); overflow-wrap: break-word; }
         [dir="rtl"] #resultBox { border-right: 8px solid; border-left: 2px solid var(--border); }
         [dir="ltr"] #resultBox { border-left: 8px solid; border-right: 2px solid var(--border); }
-        
         .status-title { font-size: 19px; font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; line-height: 1.4; }
         .status-title svg { flex-shrink: 0; }
         .status-desc { font-size: 14.5px; line-height: 1.8; font-weight: 500; color: var(--text-p); }
-
         .no-wash { background: var(--wash-none-bg); border-color: var(--wash-none-border); }
         [dir="rtl"] .no-wash { border-right-color: var(--wash-none-border); }
         [dir="ltr"] .no-wash { border-left-color: var(--wash-none-border); }
         .no-wash .status-title { color: var(--wash-none-text); }
-        
         .air-wash { background: var(--wash-air-bg); border-color: var(--wash-air-border); }
         [dir="rtl"] .air-wash { border-right-color: var(--wash-air-border); }
         [dir="ltr"] .air-wash { border-left-color: var(--wash-air-border); }
         .air-wash .status-title { color: var(--wash-air-text); }
-        
         .red-wash { background: var(--wash-full-bg); border-color: var(--wash-full-border); }
         [dir="rtl"] .red-wash { border-right-color: var(--wash-full-border); }
         [dir="ltr"] .red-wash { border-left-color: var(--wash-full-border); }
         .red-wash .status-title { color: var(--wash-full-text); }
-
-        .allergen-warning { 
-            margin-top: 20px; padding: 15px; background-color: var(--bg-surface); 
-            border-radius: 8px; color: var(--wash-full-text); font-size: 14px; font-weight: 700; 
-            display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);
-        }
+        .allergen-warning { margin-top: 20px; padding: 15px; background-color: var(--bg-surface); border-radius: 8px; color: var(--wash-full-text); font-size: 14px; font-weight: 700; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm); }
         [dir="rtl"] .allergen-warning { border-right: 4px solid var(--wash-full-border); }
         [dir="ltr"] .allergen-warning { border-left: 4px solid var(--wash-full-border); }
         .allergen-warning strong { font-size: 14.5px; display: flex; align-items: center; gap: 6px; }
-
-        .allergen-compare-box { 
-            margin-top: 25px; padding: 20px; background-color: var(--bg-surface); 
-            border: 1px solid var(--border); border-radius: 12px; font-size: 14px;
-            box-shadow: var(--shadow-sm);
-        }
+        .allergen-compare-box { margin-top: 25px; padding: 20px; background-color: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; box-shadow: var(--shadow-sm); }
         .al-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
         .al-row:last-child { margin-bottom: 0; }
         .al-row strong { font-size: 13.5px; color: var(--text-mute); display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
         .flavor-name-display { font-size: 15px; font-weight: 800; color: var(--text-h); margin-bottom: 4px; }
-        
         .al-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-        .al-tag { 
-            background: var(--bg-body); padding: 6px 12px; border-radius: 8px; 
-            font-size: 13px; border: 1px solid var(--border); font-weight: 700; color: var(--text-h);
-        }
+        .al-tag { background: var(--bg-body); padding: 6px 12px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); font-weight: 700; color: var(--text-h); }
         .al-tag.safe { background: var(--wash-none-bg); color: var(--primary); border-color: var(--wash-none-border); }
-
         .al-details { margin-top: 25px; font-size: 13.5px; border-top: 1px solid var(--border); padding-top: 20px; }
         .al-details ul { margin: 10px 0 0 0; padding-inline-start: 20px; color: var(--text-p); }
         .al-details li { margin-bottom: 8px; line-height: 1.7; }
         .al-details li strong { color: var(--text-h); }
-        
         .alert-box { color: var(--text-h); font-weight: 700; margin-bottom: 15px; padding: 12px 15px; background: var(--bg-body); border-radius: 8px; box-shadow: var(--shadow-sm); }
         [dir="rtl"] .alert-box.red { border-right: 3px solid var(--wash-full-border); border-left: none; }
         [dir="ltr"] .alert-box.red { border-left: 3px solid var(--wash-full-border); border-right: none; }
         [dir="rtl"] .alert-box.air { border-right: 3px solid var(--wash-air-border); border-left: none; }
         [dir="ltr"] .alert-box.air { border-left: 3px solid var(--wash-air-border); border-right: none; }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-            padding: 15px; animation: fadeIn 0.2s ease-out;
-        }
-        .modal-box {
-            background: var(--bg-surface); width: 100%; max-width: 550px;
-            border-radius: 24px; padding: 30px; box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-            max-height: 90vh; overflow-y: auto; position: relative;
-            animation: slideDown 0.3s ease-out;
-        }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px; animation: fadeIn 0.2s ease-out; }
+        .modal-box { background: var(--bg-surface); width: 100%; max-width: 550px; border-radius: 24px; padding: 30px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; position: relative; animation: slideDown 0.3s ease-out; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .modal-header h3 { margin: 0; color: var(--text-h); font-weight: 800; display: flex; align-items: center; gap: 8px; font-size: 18px;}
         .close-btn { background: none; border: none; font-size: 24px; color: var(--text-mute); cursor: pointer; transition: color 0.2s; }
         .close-btn:hover { color: var(--wash-full-border); }
-        
         .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .checkbox-item { 
-            display: flex; align-items: center; gap: 10px; padding: 12px; 
-            border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
-            background: var(--bg-input); transition: all 0.2s;
-        }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; background: var(--bg-input); transition: all 0.2s; }
         .checkbox-item:hover { border-color: var(--primary-light); }
         .checkbox-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); flex-shrink: 0;}
         .checkbox-item span { font-size: 13.5px; font-weight: 600; color: var(--text-h); }
-
-        .btn-outline {
-            width: 100%; background: transparent; color: var(--text-mute);
-            padding: 16px; border: 2px solid var(--border); border-radius: 14px;
-            font-family: inherit; font-size: 16px; font-weight: 700;
-            cursor: pointer; margin-top: 10px; transition: all 0.2s;
-        }
+        .btn-outline { width: 100%; background: transparent; color: var(--text-mute); padding: 16px; border: 2px solid var(--border); border-radius: 14px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
         .btn-outline:hover { background: var(--bg-body); color: var(--text-h); border-color: var(--text-mute); }
-
-        .allergen-matrix-container { 
-            margin-top: 40px; background: var(--bg-surface); border: 1px solid var(--border); 
-            border-radius: 20px; padding: 30px; box-shadow: var(--shadow-sm);
-        }
+        .allergen-matrix-container { margin-top: 40px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-sm); }
         .matrix-header { font-size: 18px; font-weight: 800; margin-bottom: 6px; text-align: center; color: var(--text-h); }
         .matrix-sub { text-align: center; font-size: 14px; color: var(--text-mute); margin-bottom: 25px; font-weight: 600; }
         .matrix-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .m-item { 
-            padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; 
-            border: 1px solid var(--border); cursor: pointer; font-family: inherit; 
-            background: var(--bg-input); color: var(--text-p); transition: all 0.2s ease;
-        }
+        .m-item { padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; border: 1px solid var(--border); cursor: pointer; font-family: inherit; background: var(--bg-input); color: var(--text-p); transition: all 0.2s ease; }
         .m-item:hover { transform: translateY(-2px); border-color: var(--text-h); color: var(--text-h); box-shadow: var(--shadow-md); }
-        
-        #allergenInfoBox { 
-            display: none; margin-top: 25px; padding: 18px; border-radius: 12px; 
-            background: var(--bg-input); border: 1px solid var(--border); 
-            animation: slideDown 0.2s ease-out forwards;
-        }
+        #allergenInfoBox { display: none; margin-top: 25px; padding: 18px; border-radius: 12px; background: var(--bg-input); border: 1px solid var(--border); animation: slideDown 0.2s ease-out forwards; }
         [dir="rtl"] #allergenInfoBox { border-right: 4px solid var(--primary); border-left: 1px solid var(--border); }
         [dir="ltr"] #allergenInfoBox { border-left: 4px solid var(--primary); border-right: 1px solid var(--border); }
         #alTitle { display: block; font-size: 15px; font-weight: 800; margin-bottom: 6px; color: var(--text-h); }
         #alDesc { font-size: 13.5px; color: var(--text-p); line-height: 1.7; font-weight: 500; }
-
         .legend-section { margin-top: 40px; background-color: var(--bg-input); border: 1px solid var(--border); border-radius: 20px; padding: 30px; }
         .legend-title { font-size: 17px; font-weight: 800; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; color: var(--text-h); }
         .legend-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px; }
@@ -328,49 +149,9 @@
         .legend-list li span { background: var(--bg-surface); padding: 6px 8px; border-radius: 10px; font-size: 15px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-shrink: 0;}
         .legend-list li strong { color: var(--text-h); font-weight: 800; display: block; margin-bottom: 2px; }
 
-        @media (max-width: 768px) {
-            body { padding: 25px 15px; }
-            .container { padding: 35px 25px; }
-            .header-section { flex-direction: column; align-items: center; gap: 20px; text-align: center; }
-            .brand-info h1 { justify-content: center; }
-            .title-area { text-align: center; }
-            [dir="ltr"] .title-area { text-align: center; }
-            .controls { width: 100%; justify-content: center; }
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 15px 10px; }
-            .container { padding: 25px 15px; border-radius: 20px; }
-            .brand-info h1 { font-size: 20px; }
-            .brand-info span { font-size: 12px; }
-            .icon-btn { width: 40px; height: 40px; font-size: 16px; }
-            .title-area h2 { font-size: 18px; }
-            .title-area p { font-size: 13.5px; }
-            .lang-btn { padding: 8px; font-size: 13px; }
-            select, input[type="text"] { padding: 14px 15px; font-size: 14px; }
-            label { font-size: 13.5px; }
-            .btn-check, .btn-primary { padding: 15px; font-size: 15px; }
-            .btn-outline { padding: 14px; font-size: 14.5px; }
-            #resultBox, .allergen-matrix-container, .legend-section { padding: 20px 15px; }
-            .status-title { font-size: 17px; }
-            .status-desc { font-size: 13.5px; }
-            .allergen-warning strong { font-size: 13.5px; }
-            .al-row strong { font-size: 12.5px; }
-            .flavor-name-display { font-size: 14px; }
-            .al-tag { font-size: 12px; padding: 5px 10px; }
-            .modal-box { padding: 25px 15px; border-radius: 20px; }
-            .modal-header h3 { font-size: 16px; }
-            .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
-            .matrix-grid { gap: 6px; }
-            .m-item { padding: 8px 12px; font-size: 12px; flex: 1 1 calc(50% - 6px); text-align: center; }
-            .legend-title { font-size: 16px; }
-            .legend-list li { font-size: 13px; }
-        }
-        
-        @media (max-width: 360px) {
-            .m-item { flex: 1 1 100%; }
-            .brand-info h1 { font-size: 18px; }
-        }
+        @media (max-width: 768px) { body { padding: 25px 15px; } .container { padding: 35px 25px; } .header-section { flex-direction: column; align-items: center; gap: 20px; text-align: center; } .brand-info h1 { justify-content: center; } .title-area { text-align: center; } [dir="ltr"] .title-area { text-align: center; } .controls { width: 100%; justify-content: center; } }
+        @media (max-width: 480px) { body { padding: 15px 10px; } .container { padding: 25px 15px; border-radius: 20px; } .brand-info h1 { font-size: 20px; } .brand-info span { font-size: 12px; } .icon-btn { width: 40px; height: 40px; font-size: 16px; } .title-area h2 { font-size: 18px; } .title-area p { font-size: 13.5px; } .lang-btn { padding: 8px; font-size: 13px; } select, input[type="text"], input[type="email"], input[type="password"] { padding: 14px 15px; font-size: 14px; } label { font-size: 13.5px; } .btn-check, .btn-primary { padding: 15px; font-size: 15px; } .btn-outline { padding: 14px; font-size: 14.5px; } #resultBox, .allergen-matrix-container, .legend-section { padding: 20px 15px; } .status-title { font-size: 17px; } .status-desc { font-size: 13.5px; } .allergen-warning strong { font-size: 13.5px; } .al-row strong { font-size: 12.5px; } .flavor-name-display { font-size: 14px; } .al-tag { font-size: 12px; padding: 5px 10px; } .modal-box { padding: 25px 15px; border-radius: 20px; } .modal-header h3 { font-size: 16px; } .checkbox-grid { grid-template-columns: 1fr; gap: 8px; } .matrix-grid { gap: 6px; } .m-item { padding: 8px 12px; font-size: 12px; flex: 1 1 calc(50% - 6px); text-align: center; } .legend-title { font-size: 16px; } .legend-list li { font-size: 13px; } }
+        @media (max-width: 360px) { .m-item { flex: 1 1 100%; } .brand-info h1 { font-size: 18px; } }
     </style>
 </head>
 <body>
@@ -381,19 +162,16 @@
         <div class="header-section">
             <div class="brand-info">
                 <h1>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path></svg>
                     GREEN IRAQ
                 </h1>
                 <span>Quality Control Systems</span>
             </div>
             <div class="controls">
-                <button class="icon-btn danger" onclick="openDelModal()" title="سڕینەوەی تام">
+                <button class="icon-btn danger" onclick="attemptDelete()" title="سڕینەوەی تام">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
-                <button class="icon-btn" onclick="openAddModal()" title="زیادکردنی تامی نوێ">
+                <button class="icon-btn" onclick="attemptAdd()" title="زیادکردنی تامی نوێ">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
                 <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="گۆڕینی دۆخی ڕووناکی">🌙</button>
@@ -464,18 +242,29 @@
                 <span id="alDesc"></span>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="legend-section">
-            <div class="legend-title" id="legTitle">📋 ڕێنماییە فەرمییەکان</div>
-            <ul class="legend-list">
-                <li id="l1"><span>⬇️</span> <div><strong>ئاڕاستەی بەرهەمهێنان:</strong> بەشێوەیەکی ئاسایی لە سەرەوە بۆ خوارەوەیە.</div></li>
-                <li id="l2"><span>💨</span> <div><strong>پاککردنەوە بە هەوا:</strong> گۆڕینی تام کە مەترسی حەساسییەتی نەبێت تەنها هەوای پێویستە.</div></li>
-                <li id="l3"><span>🚨</span> <div><strong>مەترسی حەساسییەت:</strong> ئەگەر ماددەیەک پەڕییەوە کە لە تامی داهاتوودا نەبوو، شۆردن ئیجبارییە.</div></li>
-                <li id="l5"><span>🟢</span> <div><strong>بەرهەمەکانی (FF):</strong> ناسک و بێ حەساسییەتن، مەترسی دروست ناکەن بۆ بەرهەمی دوای خۆیان.</div></li>
-                <li id="l6"><span>🍢</span> <div><strong>تامی کەباب:</strong> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە هەمیشە شۆردنی دەوێت.</div></li>
-                <li id="l7"><span>🌿</span> <div><strong>ماست و گیا:</strong> بەپێی یاسای ژمارە ٧، بۆ پاککردنەوەی ئامێرەکان لە وردیلەی گیاکان شۆردنی دەوێت.</div></li>
-            </ul>
+<!-- Modal for Admin Login (Security) -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="loginModTitle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                سکیوریتی - چوونەژوورەوە
+            </h3>
+            <button class="close-btn" onclick="closeLoginModal()">×</button>
         </div>
+        <p id="loginModDesc" style="margin-top:0; font-size: 14px; font-weight:600; color: var(--text-p);">تەنها کارمەندە ڕێگەپێدراوەکان دەتوانن دەستکاری تامەکان بکەن.</p>
+        <div class="form-group">
+            <label id="lblLoginEmail">ئیمەیڵی کارمەند:</label>
+            <input type="email" id="adminEmail" placeholder="بە نموونە: zanyar@greeniraq.com">
+        </div>
+        <div class="form-group">
+            <label id="lblLoginPass">پاسۆرد:</label>
+            <input type="password" id="adminPass" placeholder="••••••••">
+        </div>
+        <button class="btn-primary" onclick="loginAdmin()" id="btnLoginSubmit" style="margin-top: 25px;">پەسەندکردن و چوونەژوورەوە</button>
     </div>
 </div>
 
@@ -565,11 +354,11 @@
 </div>
 
 <script>
-    // --- بەستنەوەی فەرمی بە Firebase ---
+    // --- بەستنەوەی فەرمی بە Firebase و Auth ---
     const firebaseConfig = {
       apiKey: "AIzaSyAinAnr2XnsLa8TjsMqF9jeum-hG_WozuE",
       authDomain: "zanyardawdproject.firebaseapp.com",
-      databaseURL: "https://zanyardawdproject-default-rtdb.firebaseio.com", // <-- ئەم هێڵە کێشەکەی چارەسەر کرد
+      databaseURL: "https://zanyardawdproject-default-rtdb.firebaseio.com", 
       projectId: "zanyardawdproject",
       storageBucket: "zanyardawdproject.firebasestorage.app",
       messagingSenderId: "420938714179",
@@ -578,6 +367,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const dbRef = db.ref('flavors_database');
+    const auth = firebase.auth(); 
 
     function toggleTheme() {
         const html = document.documentElement;
@@ -589,6 +379,7 @@
         }
     }
 
+    // هەموو تامەکان بەتەواوی پارێزراون
     const defaultDatabase = [
         { groupName: "PC LAY'S", items: [
             { id: 0, name: {ku: "خوێ (Salt)", ar: "ملح (Salt)", en: "Salt"}, isFF: true, allergens: [] },
@@ -632,26 +423,19 @@
     let currentLang = 'ku';
     let flatList = [];
     let currentActiveAllergen = '';
+    let pendingAction = ''; 
 
-    // کارکردنی ئۆنلاین بەشێوازی پارێزراو (Anti-Crash)
     function initDatabase() {
-        // یەکەمجار داتاکە لەناو سایتەکە خۆیەوە بار دەکات بۆ ئەوەی هەرگیز شاشەکە خاڵی نەبێت
         database = JSON.parse(JSON.stringify(defaultDatabase));
         buildLists();
         updateDropdowns(false);
 
-        // پاشان هەوڵ دەدات لە فایەربەیسەوە بیهێنێت ئەگەر ئینتەرنێت هەبوو
         dbRef.on('value', (snapshot) => {
             if (snapshot.exists()) {
                 database = snapshot.val();
                 buildLists();
                 updateDropdowns(true);
-            } else {
-                // ئەگەر فایەربەیسەکە خاڵی بوو، داتا بنەڕەتییەکەی تێ بکە
-                dbRef.set(database);
             }
-        }, (error) => {
-            console.error("نەتوانرا لە فایەربەیسەوە بار بکرێت، کێشە نییە داتا لۆکاڵییەکە بەکاردێت:", error);
         });
     }
 
@@ -669,29 +453,62 @@
             modalDelLine.appendChild(new Option(cat.groupName, gIndex));
             
             if(cat.items) {
-                cat.items.forEach(item => {
-                    item.groupId = gIndex;
-                    flatList.push(item);
-                });
+                cat.items.forEach(item => { item.groupId = gIndex; flatList.push(item); });
             }
         });
-        
-        if(document.getElementById('deleteFlavorModal').style.display === 'flex') {
-            updateDelFlavorSelect();
+        if(document.getElementById('deleteFlavorModal').style.display === 'flex') updateDelFlavorSelect();
+    }
+
+    // --- سیستەمی سکیوریتی و چوونەژوورەوە ---
+    function attemptAdd() {
+        if (auth.currentUser) {
+            openAddModal(); 
+        } else {
+            pendingAction = 'add';
+            document.getElementById('loginModal').style.display = 'flex';
         }
     }
+
+    function attemptDelete() {
+        if (auth.currentUser) {
+            openDelModal();
+        } else {
+            pendingAction = 'delete';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('adminPass').value = ''; 
+    }
+
+    function loginAdmin() {
+        const email = document.getElementById('adminEmail').value;
+        const pass = document.getElementById('adminPass').value;
+        const btn = document.getElementById('btnLoginSubmit');
+        
+        if(!email || !pass) return alert("تکایە ئیمەیڵ و پاسۆرد بنووسە!");
+        
+        btn.innerText = "چاوەڕێ بە...";
+        
+        auth.signInWithEmailAndPassword(email, pass).then(() => {
+            btn.innerText = "پەسەندکردن و چوونەژوورەوە";
+            closeLoginModal();
+            if (pendingAction === 'add') openAddModal();
+            if (pendingAction === 'delete') openDelModal();
+        }).catch((error) => {
+            btn.innerText = "پەسەندکردن و چوونەژوورەوە";
+            alert("ئیمەیڵ یان پاسۆرد هەڵەیە! تکایە دڵنیابە لە زانیارییەکانت.");
+            console.error(error);
+        });
+    }
+    // ----------------------------------------
 
     const i18n = {
         ku: {
             uiTitle: "سیستەمی کۆنتڕۆڵی ماددە هەستیارەکان", uiSub: "پشکنینی فەرمی بۆ پێداویستییەکانی شۆردنی ئامێرەکان",
-            lblLine: "هێڵی بەرهەمهێنان:", lblCurrent: "تامی ئێستا (لەسەر ئامێرەکەیە):", lblNext: "تامی داهاتوو (دەستی پێدەکەیت):", 
-            btnCheck: "پشکنینی فەرمی بکە", matrixHead: "داتابەیسی ماددە هەستیارەکان", matrixSub: "کلیک لە ناوەکان بکە بۆ زانیاری تەندروستی",
-            legTitle: "📋 ڕێنماییە فەرمییەکان", l1: "<span>⬇️</span> <div><strong>ئاڕاستەی بەرهەمهێنان:</strong> بەشێوەیەکی ئاسایی لە سەرەوە بۆ خوارەوەیە.</div>",
-            l2: "<span>💨</span> <div><strong>پاککردنەوە بە هەوا:</strong> گۆڕینی تام کە مەترسی حەساسییەتی نەبێت تەنها هەوای پێویستە.</div>",
-            l3: "<span>🚨</span> <div><strong>مەترسی حەساسییەت:</strong> ئەگەر ماددەیەک پەڕییەوە کە لە تامی داهاتوودا نەبوو، شۆردن ئیجبارییە.</div>",
-            l5: "<span>🟢</span> <div><strong>بەرهەمەکانی (FF):</strong> ناسک و بێ حەساسییەتن، مەترسی دروست ناکەن بۆ بەرهەمی دوای خۆیان.</div>",
-            l6: "<span>🍢</span> <div><strong>تامی کەباب:</strong> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە هەمیشە شۆردنی دەوێت.</div>",
-            l7: "<span>🌿</span> <div><strong>ماست و گیا:</strong> بەپێی یاسای ژمارە ٧، بۆ پاککردنەوەی ئامێرەکان لە وردیلەی گیاکان شۆردنی دەوێت.</div>",
+            lblLine: "هێڵی بەرهەمهێنان:", lblCurrent: "تامی ئێستا (لەسەر ئامێرەکەیە):", lblNext: "تامی داهاتوو (دەستی پێدەکەیت):", btnCheck: "پشکنینی فەرمی بکە", matrixHead: "داتابەیسی ماددە هەستیارەکان", matrixSub: "کلیک لە ناوەکان بکە بۆ زانیاری تەندروستی",
             sameT: "هیچ شۆردنێک پێویست نییە", sameD: "بەرهەمەکە هەمان تامە، دەتوانیت بەبێ کێشە بەردەوام بیت لە بەرهەمهێنان.",
             ffT: "تەنها پاککردنەوە بە هەوا (Air Blow)", ffD: "<b>تامی سادە (FF):</b> تامی ئێستا بێ حەساسییەتە، پاککردنەوە بە هەوا بەسە بۆ دەستپێکردنی تامی داهاتوو.",
             kababT: "پێویستە بە تەواوەتی بشۆرێت (Full Wash)", kababD: "<b>تامی کەباب:</b> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە پێویستی بە شۆردن هەیە بۆ لابردنی کاریگەرییەکەی.",
@@ -709,7 +526,6 @@
         ar: {
             uiTitle: "نظام الرقابة على مسببات الحساسية", uiSub: "الفحص الرسمي لمتطلبات الغسيل لآلات الإنتاج",
             lblLine: "خط الإنتاج:", lblCurrent: "النكهة الحالية (على الآلة):", lblNext: "النكهة التالية (سيتم البدء بها):", btnCheck: "إجراء الفحص الرسمي", matrixHead: "قاعدة بيانات مسببات الحساسية", matrixSub: "انقر على الأسماء للحصول على المعلومات الصحية",
-            legTitle: "📋 التعليمات الرسمية", l1: "<span>⬇️</span> <div><strong>اتجاه الإنتاج:</strong> بشكل طبيعي يكون من الأعلى إلى الأسفل.</div>", l2: "<span>💨</span> <div><strong>التنظيف بالهواء:</strong> تغيير النكهة الذي لا يشكل خطر حساسية يتطلب الهواء فقط.</div>", l3: "<span>🚨</span> <div><strong>خطر الحساسية:</strong> إذا انتقلت مادة غير موجودة في النكهة التالية، فإن الغسيل إجباري.</div>", l5: "<span>🟢</span> <div><strong>منتجات (FF):</strong> خفيفة وخالية من الحساسية، لا تشكل خطراً على المنتج الذي يليها.</div>", l6: "<span>🍢</span> <div><strong>نكهة الكباب:</strong> وفقاً للقانون رقم 6، بسبب رائحتها القوية تحتاج دائماً إلى الغسيل.</div>", l7: "<span>🌿</span> <div><strong>اللبن والأعشاب:</strong> وفقاً للقانون رقم 7، لتنظيف الآلات من جزيئات الأعشاب، تحتاج إلى الغسيل.</div>",
             sameT: "لا يتطلب أي غسيل", sameD: "المنتج له نفس النكهة، يمكنك الاستمرار في الإنتاج بدون أي مشكلة.", ffT: "فقط تنظيف بالهواء (Air Blow)", ffD: "<b>نكهة بسيطة (FF):</b> النكهة الحالية خالية من مسببات الحساسية، التنظيف بالهواء كافٍ للبدء بالنكهة التالية.", kababT: "يجب غسلها بالكامل (Full Wash)", kababD: "<b>نكهة الكباب:</b> وفقاً للقانون رقم 6، بسبب رائحتها القوية تحتاج إلى غسيل لإزالة تأثيرها.", yogurtT: "يجب غسلها بالكامل (Full Wash)", yogurtD: "<b>اللبن والأعشاب:</b> وفقاً للقانون رقم 7، لتنظيف الآلات من جزيئات الأعشاب، الغسيل إجباري.", blockT: "يجب غسلها بالكامل (Full Wash)", blockD: "<b>خطر الحساسية (Allergen Risk):</b> توجد مادة مسببة للحساسية في النكهة الحالية غير موجودة في النكهة التالية، الغسيل إجباري.", airT: "فقط تنظيف بالهواء (Air Blow)", airD: "التغيير آمن، لا تنتقل أي مادة جديدة مسببة للحساسية (Allergen Safe).",
             al_name_lactose: "اللاكتوز", al_name_sulphites: "الكبريتات", al_name_gluten: "الغلوتين", al_name_mustard: "الخردل", al_name_wheat: "القمح", al_name_soybeans: "فول الصويا", al_name_milk: "الحليب", al_name_barley: "الشعير", warn_title: "تحذير! هناك خطر انتقال هذه المواد:", lblCurrAl: "مكونات النكهة الحالية:", lblNextAl: "مكونات النكهة التالية:", lblDetails: "المعلومات الصحية:", txtNoAllergens: "لا يوجد (Free From)", txtSafeButWash: "القرار الرسمي QC: آمن من حيث الحساسية، ولكن بسبب نوع النكهة (كباب/لبن) الغسيل الرطب إجباري.", txtAllSafeAir: "القرار الرسمي QC: النكهة التالية تحتوي على جميع مكونات النكهة السابقة، لذا فهي آمنة 100٪ وتحتاج فقط إلى الهواء.",
             info_ff_t: "🟢 Free From (خالي من الحساسية)", info_ff_d: "منتجات خالية من مسببات الحساسية، آمنة للجميع.", info_lactose_t: "🔵 Lactose (اللاكتوز)", info_lactose_d: "سكر طبيعي موجود في الحليب، يسبب مشاكل في الهضم لبعض الأشخاص.", info_sulphites_t: "🔵 Sulphites (الكبريتات)", info_sulphites_d: "نوع من المواد الحافظة يمكن أن يسبب رد فعل تحسسي.", info_gluten_t: "🔵 Gluten (الغلوتين)", info_gluten_d: "بروتين موجود في القمح والشعير، خطير على مرضى الاضطرابات الهضمية (Celiac).", info_mustard_t: "🟡 Mustard (الخردل)", info_mustard_d: "توابل يمكن أن تسبب رد فعل تحسسي شديد.", info_wheat_t: "🟡 Wheat (القمح)", info_wheat_d: "المصدر الرئيسي للغلوتين، وبعض الناس لديهم حساسية مباشرة تجاه القمح.", info_soybeans_t: "🟡 Soybeans (فول الصويا)", info_soybeans_d: "يستخدم في العديد من المكونات والزيوت وهو أحد مسببات الحساسية الشائعة.", info_milk_t: "🟡 Milk (الحليب)", info_milk_d: "القصد منه هو الحساسية تجاه بروتين الحليب (مختلف عن اللاكتوز).", info_barley_t: "🟡 Barley (الشعير)", info_barley_d: "حبوب تعتبر مصدراً آخر للغلوتين.",
@@ -719,7 +535,6 @@
         en: {
             uiTitle: "Allergen Control System", uiSub: "Official QC Check for Equipment Washing Requirements",
             lblLine: "Product Line:", lblCurrent: "Current Flavor (On Machine):", lblNext: "Next Flavor (To Be Started):", btnCheck: "Run Official QC Check", matrixHead: "Allergen Database", matrixSub: "Click on items for health information",
-            legTitle: "📋 Official Guidelines", l1: "<span>⬇️</span> <div><strong>Production Direction:</strong> Naturally proceeds from top to bottom.</div>", l2: "<span>💨</span> <div><strong>Air Cleaning:</strong> A flavor changeover with no allergen risk requires only air cleaning.</div>", l3: "<span>🚨</span> <div><strong>Allergen Risk:</strong> If an allergen carries over that is not in the next flavor, a wash is mandatory.</div>", l5: "<span>🟢</span> <div><strong>Products (FF):</strong> Delicate and allergen-free, they pose no risk to the product that follows them.</div>", l6: "<span>🍢</span> <div><strong>Kabab Flavor:</strong> According to Rule No. 6, due to its pungent scent, it always requires a wash.</div>", l7: "<span>🌿</span> <div><strong>Yogurt & Herbs:</strong> According to Rule No. 7, washing is required to clean the machines from herb particles.</div>",
             sameT: "NO CLEANING REQUIRED", sameD: "The product is the exact same flavor, you can continue production without any issues.", ffT: "AIR BLOW ONLY", ffD: "<b>Simple Flavor (FF):</b> The current flavor is allergen-free. Air cleaning is sufficient to start the next flavor.", kababT: "FULL WET WASH REQUIRED", kababD: "<b>Kabab Flavor:</b> According to Rule No. 6, due to its pungent scent, a wash is required to remove its effect.", yogurtT: "FULL WET WASH REQUIRED", yogurtD: "<b>Yogurt & Herbs:</b> According to Rule No. 7, washing is mandatory to clean the machines from herb particles.", blockT: "FULL WET WASH REQUIRED", blockD: "<b>Allergen Risk (Allergen Risk):</b> There is an allergen in the current flavor that is not present in the next flavor. A full wash is mandatory.", airT: "AIR BLOW ONLY", airD: "The changeover is safe. No new allergens are carried over (Allergen Safe).",
             al_name_lactose: "Lactose", al_name_sulphites: "Sulphites", al_name_gluten: "Gluten", al_name_mustard: "Mustard", al_name_wheat: "Wheat", al_name_soybeans: "Soybeans", al_name_milk: "Milk", al_name_barley: "Barley", warn_title: "Warning! Risk of cross-contamination for:", lblCurrAl: "Current Flavor Ingredients:", lblNextAl: "Next Flavor Ingredients:", lblDetails: "Health Information:", txtNoAllergens: "None (Free From)", txtSafeButWash: "Official QC Decision: Safe in terms of allergens, but due to flavor properties (Kabab/Yogurt), wet wash is mandatory.", txtAllSafeAir: "Official QC Decision: The next flavor contains all ingredients of the previous one. 100% safe, air blow only.",
             info_ff_t: "🟢 Free From (Allergen-Free)", info_ff_d: "Products free of allergens, safe for everyone.", info_lactose_t: "🔵 Lactose", info_lactose_d: "A natural sugar found in milk, causing digestive issues for some people.", info_sulphites_t: "🔵 Sulphites", info_sulphites_d: "A type of preservative that can cause allergic reactions.", info_gluten_t: "🔵 Gluten", info_gluten_d: "A protein found in wheat and barley, dangerous for Celiac patients.", info_mustard_t: "🟡 Mustard", info_mustard_d: "A spice that can cause severe allergic reactions.", info_wheat_t: "🟡 Wheat", info_wheat_d: "The main source of gluten, and some people have a direct allergy to wheat.", info_soybeans_t: "🟡 Soybeans", info_soybeans_d: "Used in many ingredients and oils, it is a common allergen.", info_milk_t: "🟡 Milk", info_milk_d: "This refers to an allergy to milk protein (different from Lactose).", info_barley_t: "🟡 Barley", info_barley_d: "A grain that is another source of gluten.",
@@ -729,27 +544,19 @@
     };
 
     function updateDropdowns(preserveSelection = true) {
-        const selCur = document.getElementById('currFlavor');
-        const selNxt = document.getElementById('nextFlavor');
-        
-        const curVal = selCur.value;
-        const nxtVal = selNxt.value;
-        
-        selCur.innerHTML = '';
-        selNxt.innerHTML = '';
+        const selCur = document.getElementById('currFlavor'); const selNxt = document.getElementById('nextFlavor');
+        const curVal = selCur.value; const nxtVal = selNxt.value;
+        selCur.innerHTML = ''; selNxt.innerHTML = '';
         
         const selectedCatIndex = document.getElementById('productLine').value;
         if(database[selectedCatIndex] && database[selectedCatIndex].items) {
             database[selectedCatIndex].items.forEach(item => {
-                const displayName = item.name[currentLang];
-                selCur.appendChild(new Option(displayName, item.id));
-                selNxt.appendChild(new Option(displayName, item.id));
+                selCur.appendChild(new Option(item.name[currentLang], item.id));
+                selNxt.appendChild(new Option(item.name[currentLang], item.id));
             });
         }
-
         if (preserveSelection && curVal && nxtVal && Array.from(selCur.options).some(o => o.value === curVal)) {
-            selCur.value = curVal;
-            selNxt.value = nxtVal;
+            selCur.value = curVal; selNxt.value = nxtVal;
         } else {
             document.getElementById('resultBox').style.display = 'none';
         }
@@ -759,27 +566,18 @@
         currentLang = lang;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         if (btnElement) btnElement.classList.add('active');
-        
         document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
         const t = i18n[lang];
 
         document.getElementById('uiTitle').innerText = t.uiTitle; document.getElementById('uiSub').innerText = t.uiSub;
         document.getElementById('txtLine').innerText = t.lblLine; document.getElementById('txtCurrent').innerText = t.lblCurrent; document.getElementById('txtNext').innerText = t.lblNext;
         document.getElementById('btnCheck').innerHTML = t.btnCheck + ` <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-        
         document.getElementById('matrixHead').innerText = t.matrixHead; document.getElementById('matrixSub').innerText = t.matrixSub;
-        document.getElementById('legTitle').innerText = t.legTitle;
-        document.getElementById('l1').innerHTML = t.l1; document.getElementById('l2').innerHTML = t.l2; document.getElementById('l3').innerHTML = t.l3;
-        document.getElementById('l5').innerHTML = t.l5; document.getElementById('l6').innerHTML = t.l6; document.getElementById('l7').innerHTML = t.l7;
-
-        // Modal Add
         document.getElementById('modTitle').innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> ` + t.modTitle;
         document.getElementById('modLine').innerText = t.modLine; document.getElementById('modNameKu').innerText = t.modNameKu; document.getElementById('modNameAr').innerText = t.modNameAr;
         document.getElementById('modNameEn').innerText = t.modNameEn; document.getElementById('modType').innerText = t.modType; document.getElementById('modFF').innerText = t.modFF;
         document.getElementById('modKabab').innerText = t.modKabab; document.getElementById('modYogurt').innerText = t.modYogurt; document.getElementById('modAllergens').innerText = t.modAllergens;
         document.getElementById('modSave').innerText = t.modSave; document.getElementById('modCancel').innerText = t.modCancel;
-
-        // Modal Delete
         document.getElementById('delTitle').innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> ` + t.delTitle;
         document.getElementById('delLine').innerText = t.delLine; document.getElementById('delFlavorLbl').innerText = t.delFlavorLbl; 
         document.getElementById('delBtnSave').innerText = t.delBtnSave; document.getElementById('delCancel').innerText = t.modCancel;
@@ -791,160 +589,85 @@
     }
 
     function checkWash() {
-        const selCur = document.getElementById('currFlavor');
-        const selNxt = document.getElementById('nextFlavor');
-        
-        const currItem = flatList.find(f => f.id === parseInt(selCur.value));
-        const nextItem = flatList.find(f => f.id === parseInt(selNxt.value));
-        const box = document.getElementById('resultBox');
-        const title = document.getElementById('resTitle');
-        const desc = document.getElementById('resDesc');
+        const selCur = document.getElementById('currFlavor'); const selNxt = document.getElementById('nextFlavor');
+        const currItem = flatList.find(f => f.id === parseInt(selCur.value)); const nextItem = flatList.find(f => f.id === parseInt(selNxt.value));
+        const box = document.getElementById('resultBox'); const title = document.getElementById('resTitle'); const desc = document.getElementById('resDesc');
         const t = i18n[currentLang];
 
         if(!currItem || !nextItem) return;
-
-        box.style.animation = 'none'; box.offsetHeight; 
-        box.style.animation = 'slideDown 0.3s ease-out forwards';
-        box.style.display = 'block';
+        box.style.animation = 'none'; box.offsetHeight; box.style.animation = 'slideDown 0.3s ease-out forwards'; box.style.display = 'block';
 
         let innerTitle = ""; let innerDesc = ""; let iconHtml = "";
-        const currAllergens = currItem.allergens || [];
-        const nextAllergens = nextItem.allergens || [];
+        const currAllergens = currItem.allergens || []; const nextAllergens = nextItem.allergens || [];
         const dangerAllergens = currAllergens.filter(a => !nextAllergens.includes(a));
 
         if (currItem.id === nextItem.id) {
-            box.className = 'no-wash'; 
-            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+            box.className = 'no-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
             innerTitle = iconHtml + t.sameT; innerDesc = t.sameD;
         } else if (currItem.isKabab || currItem.isYogurt || dangerAllergens.length > 0) {
-            box.className = 'red-wash';
-            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+            box.className = 'red-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
             if (currItem.isKabab) { innerTitle = iconHtml + t.kababT; innerDesc = t.kababD; }
             else if (currItem.isYogurt) { innerTitle = iconHtml + t.yogurtT; innerDesc = t.yogurtD; }
             else { innerTitle = iconHtml + t.blockT; innerDesc = t.blockD; }
         } else {
-            box.className = 'air-wash';
-            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>`;
-            if (currItem.isFF) { innerTitle = iconHtml + t.ffT; innerDesc = t.ffD; } 
-            else { innerTitle = iconHtml + t.airT; innerDesc = t.airD; }
+            box.className = 'air-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>`;
+            if (currItem.isFF) { innerTitle = iconHtml + t.ffT; innerDesc = t.ffD; } else { innerTitle = iconHtml + t.airT; innerDesc = t.airD; }
         }
 
         if (dangerAllergens.length > 0 && currItem.id !== nextItem.id) {
             const mappedNames = dangerAllergens.map(a => t['al_name_' + a]).join('، ');
             innerDesc += `<div class="allergen-warning"><strong><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='12'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg> ${t.warn_title}</strong> ${mappedNames}</div>`;
         }
-
-        const formatAl = (item) => {
-            if (item.isFF) return `<span class="al-tag safe">${t.txtNoAllergens}</span>`;
-            if (item.allergens && item.allergens.length > 0) {
-                return `<div class="al-tags">` + item.allergens.map(a => `<span class="al-tag">${t['al_name_' + a]}</span>`).join('') + `</div>`;
-            }
-            return `<span class="al-tag safe">${t.txtNoAllergens}</span>`;
-        };
-
-        let compareHtml = `<div class="allergen-compare-box">
-            <div class="al-row"><strong>${t.lblCurrAl}</strong><div class="flavor-name-display">${currItem.name[currentLang]}</div>${formatAl(currItem)}</div>
-            <div class="al-row" style="margin-top: 15px;"><strong>${t.lblNextAl}</strong><div class="flavor-name-display">${nextItem.name[currentLang]}</div>${formatAl(nextItem)}</div>`;
-
-        const uniqueAllergens = [...new Set([...currAllergens, ...nextAllergens])];
-        if(uniqueAllergens.length > 0) {
-            compareHtml += `<div class="al-details">`;
-            if (dangerAllergens.length === 0 && currItem.id !== nextItem.id) {
-                if (box.className === 'red-wash') { compareHtml += `<div class="alert-box red">${t.txtSafeButWash}</div>`; } 
-                else if (box.className === 'air-wash') { compareHtml += `<div class="alert-box air">${t.txtAllSafeAir}</div>`; }
-            }
-            compareHtml += `<strong>${t.lblDetails}</strong><ul>`;
-            uniqueAllergens.forEach(a => { compareHtml += `<li><strong>${t['al_name_' + a]}:</strong> ${t['info_' + a + '_d']}</li>`; });
-            compareHtml += `</ul></div>`;
-        } else {
-            if (box.className === 'red-wash') { compareHtml += `<div class="al-details" style="color: var(--text-h); font-weight: 700;">${t.txtSafeButWash}</div>`; } 
-            else { compareHtml += `<div class="al-details" style="color: var(--text-h); font-weight: 700;">${t.txtAllSafeAir}</div>`; }
-        }
-
-        title.innerHTML = innerTitle; desc.innerHTML = innerDesc + compareHtml + `</div>`;
+        title.innerHTML = innerTitle; desc.innerHTML = innerDesc;
     }
 
     function showInfo(allergen) {
-        currentActiveAllergen = allergen;
-        const box = document.getElementById('allergenInfoBox');
+        currentActiveAllergen = allergen; const box = document.getElementById('allergenInfoBox');
         const tTitle = document.getElementById('alTitle'); const tDesc = document.getElementById('alDesc');
         const t = i18n[currentLang];
         tTitle.innerHTML = t['info_' + allergen + '_t']; tDesc.innerHTML = t['info_' + allergen + '_d'];
         box.style.animation = 'none'; box.offsetHeight; box.style.animation = 'slideDown 0.2s ease-out forwards'; box.style.display = 'block';
     }
 
-    // Modal Add Logic
     function openAddModal() { document.getElementById('addFlavorModal').style.display = 'flex'; }
     function closeAddModal() { document.getElementById('addFlavorModal').style.display = 'none'; document.getElementById('newFlavorForm').reset(); }
-
+    
     function saveNewFlavor(event) {
         event.preventDefault();
         const gIndex = document.getElementById('newGroupSelect').value;
-        const nameKu = document.getElementById('newNameKu').value.trim();
-        const nameAr = document.getElementById('newNameAr').value.trim();
-        const nameEn = document.getElementById('newNameEn').value.trim();
-        const isFF = document.getElementById('newFF').checked;
-        const isKabab = document.getElementById('newKabab').checked;
-        const isYogurt = document.getElementById('newYogurt').checked;
-        
-        const allergens = [];
-        document.querySelectorAll('.al-check:checked').forEach(cb => { allergens.push(cb.value); });
-
+        const nameKu = document.getElementById('newNameKu').value.trim(); const nameAr = document.getElementById('newNameAr').value.trim(); const nameEn = document.getElementById('newNameEn').value.trim();
+        const isFF = document.getElementById('newFF').checked; const isKabab = document.getElementById('newKabab').checked; const isYogurt = document.getElementById('newYogurt').checked;
+        const allergens = []; document.querySelectorAll('.al-check:checked').forEach(cb => { allergens.push(cb.value); });
         let maxId = -1; flatList.forEach(item => { if(item.id > maxId) maxId = item.id; });
         const newId = maxId + 1;
         
         if (!database[gIndex].items) { database[gIndex].items = []; }
         database[gIndex].items.push({ id: newId, name: { ku: nameKu, ar: nameAr, en: nameEn }, isFF: isFF, isKabab: isKabab, isYogurt: isYogurt, allergens: allergens });
         
-        // بەرزکردنەوەی گۆڕانکارییەکە بۆ فایەربەیس
         dbRef.set(database).then(() => {
-            closeAddModal();
-            alert(currentLang === 'ku' ? "تامەکە بە سەرکەوتوویی زیادکرا!" : (currentLang === 'ar' ? "تمت الإضافة بنجاح!" : "Flavor added successfully!"));
-        }).catch((error) => {
-            alert("کێشەیەک هەیە لە ئینتەرنێت، نەتوانرا سەیڤ بکرێت.");
-        });
+            closeAddModal(); alert(currentLang === 'ku' ? "بە سەرکەوتوویی زیادکرا!" : "تمت الإضافة!");
+        }).catch((error) => { alert("پاسۆردەکەت هەڵەیە یان ڕێگەپێدراو نیت بۆ سەیڤکردن!"); });
     }
 
-    // Modal Delete Logic
-    function openDelModal() { 
-        document.getElementById('deleteFlavorModal').style.display = 'flex'; 
-        updateDelFlavorSelect();
-    }
-    function closeDelModal() { 
-        document.getElementById('deleteFlavorModal').style.display = 'none'; 
-    }
+    function openDelModal() { document.getElementById('deleteFlavorModal').style.display = 'flex'; updateDelFlavorSelect(); }
+    function closeDelModal() { document.getElementById('deleteFlavorModal').style.display = 'none'; }
     function updateDelFlavorSelect() {
-        const delSelect = document.getElementById('delFlavorSelect');
-        const gIndex = document.getElementById('delGroupSelect').value;
+        const delSelect = document.getElementById('delFlavorSelect'); const gIndex = document.getElementById('delGroupSelect').value;
         delSelect.innerHTML = '';
-        if(database[gIndex] && database[gIndex].items) {
-            database[gIndex].items.forEach(item => {
-                delSelect.appendChild(new Option(item.name[currentLang], item.id));
-            });
-        }
+        if(database[gIndex] && database[gIndex].items) { database[gIndex].items.forEach(item => { delSelect.appendChild(new Option(item.name[currentLang], item.id)); }); }
     }
 
     function deleteFlavor(event) {
         event.preventDefault();
-        const gIndex = document.getElementById('delGroupSelect').value;
-        const fId = parseInt(document.getElementById('delFlavorSelect').value);
-        
-        const t = i18n[currentLang];
-        if(!confirm(t.delConfirm)) return;
+        const gIndex = document.getElementById('delGroupSelect').value; const fId = parseInt(document.getElementById('delFlavorSelect').value);
+        if(!confirm(i18n[currentLang].delConfirm)) return;
 
         database[gIndex].items = database[gIndex].items.filter(item => item.id !== fId);
-        
-        // سڕینەوە لە فایەربەیس
         dbRef.set(database).then(() => {
-            closeDelModal(); 
-            document.getElementById('resultBox').style.display = 'none';
-            alert(t.delSuccess);
-        }).catch((error) => {
-            alert("کێشەیەک هەیە لە ئینتەرنێت، نەتوانرا بسڕێتەوە.");
-        });
+            closeDelModal(); document.getElementById('resultBox').style.display = 'none'; alert(i18n[currentLang].delSuccess);
+        }).catch((error) => { alert("پاسۆردەکەت هەڵەیە یان ڕێگەپێدراو نیت بۆ سڕینەوە!"); });
     }
 
-    // Initialize
     initDatabase();
 </script>
 
