@@ -1,0 +1,870 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ku" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QC Allergen Matrix - Green Iraq</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669; 
+            --primary-hover: #047857;
+            --primary-light: #d1fae5;
+            --accent: #2563eb; 
+            
+            --bg-body: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-input: #f8fafc;
+            
+            --text-h: #0f172a;
+            --text-p: #475569;
+            --text-mute: #94a3b8;
+            
+            --border: #e2e8f0;
+            --border-focus: #94a3b8;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 15px 35px -5px rgba(15, 23, 42, 0.08);
+            
+            --wash-none-bg: #ecfdf5; --wash-none-text: #065f46; --wash-none-border: #10b981;
+            --wash-air-bg: #eff6ff; --wash-air-text: #1e3a8a; --wash-air-border: #3b82f6;
+            --wash-full-bg: #fef2f2; --wash-full-text: #991b1b; --wash-full-border: #ef4444;
+        }
+
+        [data-theme="dark"] {
+            --primary: #10b981;
+            --primary-hover: #34d399;
+            --primary-light: rgba(16, 185, 129, 0.15);
+            --accent: #60a5fa;
+            
+            --bg-body: #0b1120;
+            --bg-surface: #1e293b;
+            --bg-input: #0f172a;
+            
+            --text-h: #f8fafc;
+            --text-p: #cbd5e1;
+            --text-mute: #64748b;
+            
+            --border: #334155;
+            --border-focus: #475569;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+            --shadow-lg: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
+            
+            --wash-none-bg: rgba(16, 185, 129, 0.1); --wash-none-text: #34d399; 
+            --wash-air-bg: rgba(59, 130, 246, 0.1); --wash-air-text: #60a5fa; 
+            --wash-full-bg: rgba(239, 68, 68, 0.1); --wash-full-text: #f87171; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif; 
+            color: var(--text-p); 
+            margin: 0; padding: 40px 15px; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; line-height: 1.6;
+            background-color: var(--bg-body);
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 24px 24px;
+            transition: background-color 0.3s ease;
+        }
+
+        .main-wrapper { width: 100%; max-width: 740px; }
+
+        .container {
+            background: var(--bg-surface); 
+            padding: 45px; 
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg); 
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .container::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+        }
+
+        .header-section {
+            display: flex; justify-content: space-between; align-items: flex-start; 
+            margin-bottom: 30px; border-bottom: 2px solid var(--bg-body);
+            padding-bottom: 20px;
+        }
+
+        .brand-info h1 { 
+            color: var(--text-h); font-size: 24px; margin: 0 0 4px 0; font-weight: 900; 
+            letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; 
+        }
+        .brand-info h1 svg { width: 28px; height: 28px; color: var(--primary); }
+        .brand-info span { 
+            color: var(--text-mute); font-size: 13px; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+
+        .controls { display: flex; gap: 10px; }
+        .icon-btn {
+            background: var(--bg-input); border: 1px solid var(--border); 
+            color: var(--text-h); font-size: 18px; width: 42px; height: 42px; 
+            border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+        }
+        .icon-btn:hover { background: var(--border); transform: scale(1.05); color: var(--primary); }
+        .icon-btn.danger:hover { color: var(--wash-full-border); }
+
+        .lang-switcher { 
+            display: flex; background: var(--bg-input); padding: 4px; 
+            border-radius: 14px; margin-bottom: 35px; border: 1px solid var(--border); 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .lang-btn { 
+            flex: 1; padding: 10px; border: none; background: transparent; 
+            font-family: 'Vazirmatn', sans-serif; font-size: 14px; font-weight: 700; 
+            color: var(--text-mute); border-radius: 10px; cursor: pointer; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .lang-btn:hover:not(.active) { color: var(--text-h); }
+        .lang-btn.active { 
+            background: var(--bg-surface); color: var(--text-h); 
+            box-shadow: var(--shadow-md); border: 1px solid var(--border);
+        }
+
+        .title-area { margin-bottom: 30px; text-align: right; }
+        [dir="ltr"] .title-area { text-align: left; }
+        
+        .title-area h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; color: var(--text-h); }
+        .title-area p { margin: 0; font-size: 14.5px; color: var(--text-p); font-weight: 500; }
+
+        .form-group { margin-bottom: 22px; }
+        label { 
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px; 
+            font-weight: 700; font-size: 14.5px; color: var(--text-h); 
+        }
+        label svg { color: var(--primary); width: 18px; height: 18px; }
+        
+        select, input[type="text"] { 
+            width: 100%; padding: 16px 20px; 
+            border: 2px solid var(--border); border-radius: 14px; 
+            font-family: 'Vazirmatn', sans-serif; font-size: 15px; font-weight: 600; 
+            background-color: var(--bg-input); color: var(--text-h); 
+            outline: none; transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+        }
+        select {
+            cursor: pointer; appearance: none; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+            background-repeat: no-repeat; background-position: left 1rem center; background-size: 1em; 
+        }
+        [dir="ltr"] select { background-position: right 1rem center; }
+        [data-theme="dark"] select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+        }
+        select:hover, input[type="text"]:hover { border-color: var(--border-focus); }
+        select:focus, input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        select option { background-color: var(--bg-surface); color: var(--text-h); font-weight: 500; }
+        
+        #productLine { background-color: var(--primary-light); border-color: transparent; color: var(--primary-hover); }
+        [data-theme="dark"] #productLine { color: var(--primary); }
+
+        .btn-check, .btn-primary { 
+            width: 100%; background: var(--text-h); 
+            color: var(--bg-surface); padding: 18px; border: none; border-radius: 14px; 
+            font-family: 'Vazirmatn', sans-serif; font-size: 17px; font-weight: 800; 
+            cursor: pointer; margin-top: 15px; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: all 0.2s ease; box-shadow: var(--shadow-md);
+        }
+        .btn-check:hover, .btn-primary:hover { background: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-check:active, .btn-primary:active { transform: translateY(0); }
+        .btn-check svg { transition: transform 0.2s; }
+        
+        .btn-danger { background: var(--wash-full-border); }
+        .btn-danger:hover { background: #b91c1c; }
+
+        [dir="rtl"] .btn-check:hover svg { transform: translateX(-4px); }
+        [dir="ltr"] .btn-check:hover svg { transform: translateX(4px); }
+
+        @keyframes slideDown { 
+            0% { opacity: 0; transform: translateY(10px); } 
+            100% { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes fadeIn { 
+            0% { opacity: 0; } 100% { opacity: 1; } 
+        }
+
+        #resultBox { 
+            margin-top: 35px; padding: 30px; border-radius: 16px; display: none; 
+            animation: slideDown 0.3s ease-out forwards; 
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+        [dir="rtl"] #resultBox { border-right: 8px solid; border-left: 2px solid var(--border); }
+        [dir="ltr"] #resultBox { border-left: 8px solid; border-right: 2px solid var(--border); }
+        
+        .status-title { font-size: 20px; font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .status-desc { font-size: 15px; line-height: 1.8; font-weight: 500; color: var(--text-p); }
+
+        .no-wash { background: var(--wash-none-bg); border-color: var(--wash-none-border); }
+        [dir="rtl"] .no-wash { border-right-color: var(--wash-none-border); }
+        [dir="ltr"] .no-wash { border-left-color: var(--wash-none-border); }
+        .no-wash .status-title { color: var(--wash-none-text); }
+        
+        .air-wash { background: var(--wash-air-bg); border-color: var(--wash-air-border); }
+        [dir="rtl"] .air-wash { border-right-color: var(--wash-air-border); }
+        [dir="ltr"] .air-wash { border-left-color: var(--wash-air-border); }
+        .air-wash .status-title { color: var(--wash-air-text); }
+        
+        .red-wash { background: var(--wash-full-bg); border-color: var(--wash-full-border); }
+        [dir="rtl"] .red-wash { border-right-color: var(--wash-full-border); }
+        [dir="ltr"] .red-wash { border-left-color: var(--wash-full-border); }
+        .red-wash .status-title { color: var(--wash-full-text); }
+
+        .allergen-warning { 
+            margin-top: 20px; padding: 15px 20px; background-color: var(--bg-surface); 
+            border-radius: 8px; color: var(--wash-full-text); font-size: 14.5px; font-weight: 700; 
+            display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);
+        }
+        [dir="rtl"] .allergen-warning { border-right: 4px solid var(--wash-full-border); }
+        [dir="ltr"] .allergen-warning { border-left: 4px solid var(--wash-full-border); }
+        .allergen-warning strong { font-size: 15px; display: flex; align-items: center; gap: 6px; }
+
+        .allergen-compare-box { 
+            margin-top: 25px; padding: 25px; background-color: var(--bg-surface); 
+            border: 1px solid var(--border); border-radius: 12px; font-size: 14.5px;
+            box-shadow: var(--shadow-sm);
+        }
+        .al-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .al-row:last-child { margin-bottom: 0; }
+        .al-row strong { font-size: 14px; color: var(--text-mute); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .flavor-name-display { font-size: 15.5px; font-weight: 800; color: var(--text-h); margin-bottom: 4px; }
+        
+        .al-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+        .al-tag { 
+            background: var(--bg-body); padding: 6px 14px; border-radius: 8px; 
+            font-size: 13.5px; border: 1px solid var(--border); font-weight: 700; color: var(--text-h);
+        }
+        .al-tag.safe { background: var(--wash-none-bg); color: var(--primary); border-color: var(--wash-none-border); }
+
+        .al-details { margin-top: 25px; font-size: 14px; border-top: 1px solid var(--border); padding-top: 20px; }
+        .al-details ul { margin: 10px 0 0 0; padding-inline-start: 20px; color: var(--text-p); }
+        .al-details li { margin-bottom: 8px; line-height: 1.7; }
+        .al-details li strong { color: var(--text-h); }
+        
+        .alert-box { color: var(--text-h); font-weight: 700; margin-bottom: 15px; padding: 12px 15px; background: var(--bg-body); border-radius: 8px; box-shadow: var(--shadow-sm); }
+        [dir="rtl"] .alert-box.red { border-right: 3px solid var(--wash-full-border); border-left: none; }
+        [dir="ltr"] .alert-box.red { border-left: 3px solid var(--wash-full-border); border-right: none; }
+        [dir="rtl"] .alert-box.air { border-right: 3px solid var(--wash-air-border); border-left: none; }
+        [dir="ltr"] .alert-box.air { border-left: 3px solid var(--wash-air-border); border-right: none; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+            padding: 20px; animation: fadeIn 0.2s ease-out;
+        }
+        .modal-box {
+            background: var(--bg-surface); width: 100%; max-width: 550px;
+            border-radius: 24px; padding: 35px; box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            max-height: 90vh; overflow-y: auto; position: relative;
+            animation: slideDown 0.3s ease-out;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .modal-header h3 { margin: 0; color: var(--text-h); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .close-btn { background: none; border: none; font-size: 24px; color: var(--text-mute); cursor: pointer; transition: color 0.2s; }
+        .close-btn:hover { color: var(--wash-full-border); }
+        
+        .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .checkbox-item { 
+            display: flex; align-items: center; gap: 10px; padding: 12px; 
+            border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+            background: var(--bg-input); transition: all 0.2s;
+        }
+        .checkbox-item:hover { border-color: var(--primary-light); }
+        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary); }
+        .checkbox-item span { font-size: 14px; font-weight: 600; color: var(--text-h); }
+
+        .btn-outline {
+            width: 100%; background: transparent; color: var(--text-mute);
+            padding: 16px; border: 2px solid var(--border); border-radius: 14px;
+            font-family: inherit; font-size: 16px; font-weight: 700;
+            cursor: pointer; margin-top: 10px; transition: all 0.2s;
+        }
+        .btn-outline:hover { background: var(--bg-body); color: var(--text-h); border-color: var(--text-mute); }
+
+        .allergen-matrix-container { 
+            margin-top: 40px; background: var(--bg-surface); border: 1px solid var(--border); 
+            border-radius: 20px; padding: 35px; box-shadow: var(--shadow-sm);
+        }
+        .matrix-header { font-size: 18px; font-weight: 800; margin-bottom: 6px; text-align: center; color: var(--text-h); }
+        .matrix-sub { text-align: center; font-size: 14px; color: var(--text-mute); margin-bottom: 25px; font-weight: 600; }
+        .matrix-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .m-item { 
+            padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; 
+            border: 1px solid var(--border); cursor: pointer; font-family: inherit; 
+            background: var(--bg-input); color: var(--text-p); transition: all 0.2s ease;
+        }
+        .m-item:hover { transform: translateY(-2px); border-color: var(--text-h); color: var(--text-h); box-shadow: var(--shadow-md); }
+        
+        #allergenInfoBox { 
+            display: none; margin-top: 25px; padding: 20px; border-radius: 12px; 
+            background: var(--bg-input); border: 1px solid var(--border); 
+            animation: slideDown 0.2s ease-out forwards;
+        }
+        [dir="rtl"] #allergenInfoBox { border-right: 4px solid var(--primary); border-left: 1px solid var(--border); }
+        [dir="ltr"] #allergenInfoBox { border-left: 4px solid var(--primary); border-right: 1px solid var(--border); }
+        #alTitle { display: block; font-size: 15.5px; font-weight: 800; margin-bottom: 6px; color: var(--text-h); }
+        #alDesc { font-size: 14px; color: var(--text-p); line-height: 1.7; font-weight: 500; }
+
+        .legend-section { margin-top: 40px; background-color: var(--bg-input); border: 1px solid var(--border); border-radius: 20px; padding: 35px; }
+        .legend-title { font-size: 17.5px; font-weight: 800; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; color: var(--text-h); }
+        .legend-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 18px; }
+        .legend-list li { font-size: 14px; line-height: 1.7; color: var(--text-p); font-weight: 500; display: flex; align-items: flex-start; gap: 14px; }
+        .legend-list li span { background: var(--bg-surface); padding: 8px 10px; border-radius: 10px; font-size: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .legend-list li strong { color: var(--text-h); font-weight: 800; display: block; margin-bottom: 2px; }
+
+        @media (max-width: 600px) { 
+            body { padding: 15px 10px; }
+            .container { padding: 30px 20px; border-radius: 20px; } 
+            .modal-box { padding: 25px 20px; }
+            .checkbox-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="container">
+        
+        <div class="header-section">
+            <div class="brand-info">
+                <h1>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                    </svg>
+                    GREEN IRAQ
+                </h1>
+                <span>Quality Control Systems</span>
+            </div>
+            <div class="controls">
+                <button class="icon-btn danger" onclick="openDelModal()" title="سڕینەوەی تام">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+                <button class="icon-btn" onclick="openAddModal()" title="زیادکردنی تامی نوێ">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="گۆڕینی دۆخی ڕووناکی">🌙</button>
+            </div>
+        </div>
+
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="changeLang('ku', this)">کوردی</button>
+            <button class="lang-btn" onclick="changeLang('ar', this)">العربية</button>
+            <button class="lang-btn" onclick="changeLang('en', this)">English</button>
+        </div>
+
+        <div class="title-area">
+            <h2 id="uiTitle">سیستەمی کۆنتڕۆڵی ماددە هەستیارەکان</h2>
+            <p id="uiSub">پشکنینی فەرمی بۆ پێداویستییەکانی شۆردنی ئامێرەکان</p>
+        </div>
+
+        <div class="form-group">
+            <label id="lblLine">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <span id="txtLine">هێڵی بەرهەمهێنان:</span>
+            </label>
+            <select id="productLine" onchange="updateDropdowns(false)"></select>
+        </div>
+
+        <div class="form-group">
+            <label id="lblCurrent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span id="txtCurrent">تامی ئێستا (لەسەر ئامێرەکەیە):</span>
+            </label>
+            <select id="currFlavor"></select>
+        </div>
+
+        <div class="form-group">
+            <label id="lblNext">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span id="txtNext">تامی داهاتوو (دەستی پێدەکەیت):</span>
+            </label>
+            <select id="nextFlavor"></select>
+        </div>
+
+        <button class="btn-check" onclick="checkWash()" id="btnCheck">
+            پشکنینی فەرمی بکە
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </button>
+
+        <div id="resultBox">
+            <div class="status-title" id="resTitle"></div>
+            <div class="status-desc" id="resDesc"></div>
+        </div>
+
+        <div class="allergen-matrix-container">
+            <div class="matrix-header" id="matrixHead">داتابەیسی ماددە هەستیارەکان</div>
+            <div class="matrix-sub" id="matrixSub">کلیک لە ناوەکان بکە بۆ زانیاری تەندروستی</div>
+            <div class="matrix-grid">
+                <button class="m-item" onclick="showInfo('ff')" style="color: var(--primary); border-color: var(--primary);">Free From</button>
+                <button class="m-item" onclick="showInfo('lactose')">Lactose</button>
+                <button class="m-item" onclick="showInfo('sulphites')">Sulphites</button>
+                <button class="m-item" onclick="showInfo('gluten')">Gluten</button>
+                <button class="m-item" onclick="showInfo('mustard')">Mustard</button>
+                <button class="m-item" onclick="showInfo('wheat')">Wheat</button>
+                <button class="m-item" onclick="showInfo('soybeans')">Soybeans</button>
+                <button class="m-item" onclick="showInfo('milk')">Milk</button>
+                <button class="m-item" onclick="showInfo('barley')">Barley</button>
+            </div>
+            <div id="allergenInfoBox">
+                <span id="alTitle"></span>
+                <span id="alDesc"></span>
+            </div>
+        </div>
+
+        <div class="legend-section">
+            <div class="legend-title" id="legTitle">📋 ڕێنماییە فەرمییەکان</div>
+            <ul class="legend-list">
+                <li id="l1"><span>⬇️</span> <div><strong>ئاڕاستەی بەرهەمهێنان:</strong> بەشێوەیەکی ئاسایی لە سەرەوە بۆ خوارەوەیە.</div></li>
+                <li id="l2"><span>💨</span> <div><strong>پاککردنەوە بە هەوا:</strong> گۆڕینی تام کە مەترسی حەساسییەتی نەبێت تەنها هەوای پێویستە.</div></li>
+                <li id="l3"><span>🚨</span> <div><strong>مەترسی حەساسییەت:</strong> ئەگەر ماددەیەک پەڕییەوە کە لە تامی داهاتوودا نەبوو، شۆردن ئیجبارییە.</div></li>
+                <li id="l5"><span>🟢</span> <div><strong>بەرهەمەکانی (FF):</strong> ناسک و بێ حەساسییەتن، مەترسی دروست ناکەن بۆ بەرهەمی دوای خۆیان.</div></li>
+                <li id="l6"><span>🍢</span> <div><strong>تامی کەباب:</strong> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە هەمیشە شۆردنی دەوێت.</div></li>
+                <li id="l7"><span>🌿</span> <div><strong>ماست و گیا:</strong> بەپێی یاسای ژمارە ٧، بۆ پاککردنەوەی ئامێرەکان لە وردیلەی گیاکان شۆردنی دەوێت.</div></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding New Flavor -->
+<div class="modal-overlay" id="addFlavorModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="modTitle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                زیادکردنی تامی نوێ
+            </h3>
+            <button class="close-btn" onclick="closeAddModal()">×</button>
+        </div>
+        
+        <form id="newFlavorForm" onsubmit="saveNewFlavor(event)">
+            <div class="form-group">
+                <label id="modLine">هەڵبژاردنی هێڵ (Group):</label>
+                <select id="newGroupSelect" required></select>
+            </div>
+            <div class="form-group">
+                <label id="modNameKu">ناوی تام (کوردی):</label>
+                <input type="text" id="newNameKu" required placeholder="نموونە: تامی پەنیر">
+            </div>
+            <div class="form-group">
+                <label id="modNameAr">ناوی تام (عەرەبی):</label>
+                <input type="text" id="newNameAr" required placeholder="مثال: نكهة الجبنة">
+            </div>
+            <div class="form-group">
+                <label id="modNameEn">ناوی تام (ئینگلیزی):</label>
+                <input type="text" id="newNameEn" required placeholder="Example: Cheese Flavor">
+            </div>
+            
+            <div class="form-group" style="margin-top: 25px;">
+                <label id="modType">تایبەتمەندی تایبەت (ئەگەر هەیەتی):</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" id="newFF"> <span id="modFF">سادە (Free From)</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="newKabab"> <span id="modKabab">تامی کەباب</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="newYogurt"> <span id="modYogurt">ماست و گیا</span></label>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 25px;">
+                <label id="modAllergens">ماددە هەستیارەکان (Allergens):</label>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" value="lactose" class="al-check"> <span>Lactose</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="sulphites" class="al-check"> <span>Sulphites</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="gluten" class="al-check"> <span>Gluten</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="mustard" class="al-check"> <span>Mustard</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="wheat" class="al-check"> <span>Wheat</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="soybeans" class="al-check"> <span>Soybeans</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="milk" class="al-check"> <span>Milk</span></label>
+                    <label class="checkbox-item"><input type="checkbox" value="barley" class="al-check"> <span>Barley</span></label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="modSave" style="margin-top: 30px;">پاشەکەوتکردن</button>
+            <button type="button" class="btn-outline" id="modCancel" onclick="closeAddModal()">پاشگەزبوونەوە</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for Deleting Flavor -->
+<div class="modal-overlay" id="deleteFlavorModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="delTitle" style="color: var(--wash-full-border);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                سڕینەوەی تام
+            </h3>
+            <button class="close-btn" onclick="closeDelModal()">×</button>
+        </div>
+        
+        <form id="deleteFlavorForm" onsubmit="deleteFlavor(event)">
+            <div class="form-group">
+                <label id="delLine">هەڵبژاردنی هێڵ (Group):</label>
+                <select id="delGroupSelect" onchange="updateDelFlavorSelect()" required></select>
+            </div>
+            <div class="form-group">
+                <label id="delFlavorLbl">هەڵبژاردنی تام بۆ سڕینەوە:</label>
+                <select id="delFlavorSelect" required></select>
+            </div>
+            
+            <button type="submit" class="btn-primary btn-danger" id="delBtnSave" style="margin-top: 30px;">سڕینەوەی یەکجاری</button>
+            <button type="button" class="btn-outline" id="delCancel" onclick="closeDelModal()">پاشگەزبوونەوە</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (html.getAttribute('data-theme') === 'light') {
+            html.setAttribute('data-theme', 'dark'); btn.innerText = '☀️';
+        } else {
+            html.setAttribute('data-theme', 'light'); btn.innerText = '🌙';
+        }
+    }
+
+    const defaultDatabase = [
+        { groupName: "PC LAY'S", items: [
+            { id: 0, name: {ku: "خوێ (Salt)", ar: "ملح (Salt)", en: "Salt"}, isFF: true, allergens: [] },
+            { id: 1, name: {ku: "ستەیکی ئەرجەنتینی (Steak)", ar: "ستيك أرجنتيني (Steak)", en: "Argentinian-style steak"}, isFF: true, allergens: [] },
+            { id: 2, name: {ku: "خوێ و سرکە (Salt & Vinegar)", ar: "ملح وخل (Salt & Vinegar)", en: "Salt & Vinegar Flavor"}, allergens: ['gluten', 'wheat'] },
+            { id: 3, name: {ku: "کەباب (Kabab)", ar: "كباب (Kabab)", en: "Kabab Flavor"}, isKabab: true, allergens: ['gluten', 'wheat'] },
+            { id: 4, name: {ku: "بیف بێرگر (Beef-Burger)", ar: "بيف برجر (Beef-Burger)", en: "Beef-Burger"}, allergens: ['gluten', 'wheat'] },
+            { id: 5, name: {ku: "بیبەری شیرین (Sweet Chilli)", ar: "فلفل حلو (Sweet Chilli)", en: "Sweet Chilli"}, allergens: ['gluten', 'wheat'] },
+            { id: 6, name: {ku: "بیبەر و لیمۆ (Chilli & Lemon)", ar: "فلفل وليمون (Chilli & Lemon)", en: "Chilli Pepper & Lemon"}, allergens: ['gluten', 'wheat'] },
+            { id: 7, name: {ku: "بەهاراتی دۆڵمە (Dolma Spices)", ar: "بهارات دولمة (Dolma Spices)", en: "Dolma Spices"}, allergens: ['gluten', 'wheat'] },
+            { id: 8, name: {ku: "باربیکیو (Barbecue)", ar: "باربيكيو (Barbecue)", en: "Barbecue"}, allergens: ['gluten', 'wheat'] },
+            { id: 9, name: {ku: "باربیکیوی بەڕازیلی (Brazilian BBQ)", ar: "باربيكيو برازيلي (Brazilian BBQ)", en: "Brazilian Barbecue"}, allergens: ['gluten', 'wheat', 'soybeans'] },
+            { id: 10, name: {ku: "بیبەری مەکسیکی (Mexican Chilli)", ar: "فلفل مكسيكي (Mexican Chilli)", en: "Mexican Chilli"}, allergens: ['gluten', 'wheat', 'soybeans'] },
+            { id: 11, name: {ku: "پەنیر و پیاز (Cheese & Onion)", ar: "جبنة وبصل (Cheese & Onion)", en: "Cheese & Onion Flavor"}, allergens: ['lactose', 'gluten', 'wheat', 'milk'] },
+            { id: 12, name: {ku: "ماست و گیا (Yogurt & Herbs)", ar: "لبن وأعشاب (Yogurt & Herbs)", en: "Yogurt & Herbs"}, isYogurt: true, allergens: ['lactose', 'soybeans', 'milk'] },
+            { id: 13, name: {ku: "فلامین هۆت (Flamin Hot)", ar: "فلامنج هوت (Flamin Hot)", en: "Flamin Hot"}, allergens: ['lactose', 'soybeans', 'milk'] },
+            { id: 14, name: {ku: "کەتچاپ (Tomato Ketchup)", ar: "كاتشب الطماطم (Tomato Ketchup)", en: "Tomato Ketchup Flavor"}, allergens: ['gluten', 'mustard', 'barley'] }
+        ]},
+        { groupName: "POPCORN", items: [
+            { id: 15, name: {ku: "کەرە (Butter)", ar: "زبدة (Butter)", en: "Butter Flavor"}, allergens: ['lactose', 'milk'] },
+            { id: 16, name: {ku: "پەنیر (Cheese)", ar: "جبنة (Cheese)", en: "Cheese Flavor"}, allergens: ['lactose', 'gluten', 'wheat', 'milk'] },
+            { id: 17, name: {ku: "کەتچاپی تیژ (Spicy Tomato Ketchup)", ar: "كاتشب حار (Spicy Ketchup)", en: "Spicy Tomato Ketchup"}, allergens: ['gluten', 'wheat'] }
+        ]},
+        { groupName: "TC", items: [
+            { id: 18, name: {ku: "تاکۆ (TACO)", ar: "تاكو (TACO)", en: "TACO Flavor"}, allergens: ['gluten', 'wheat'] },
+            { id: 19, name: {ku: "ناچۆ (FPF Nacho)", ar: "ناشو (FPF Nacho)", en: "FPF Nacho Flavor"}, allergens: ['lactose', 'gluten', 'wheat', 'milk'] },
+            { id: 20, name: {ku: "بیبەری شیرین (FPF Sweet Chilli)", ar: "فلفل حلو (FPF Sweet Chilli)", en: "FPF Sweet Chilli Flavor"}, allergens: ['soybeans'] }
+        ]},
+        { groupName: "Crunchy Cheetos", items: [
+            { id: 21, name: {ku: "پەنیری کرێمی (Creamy Cheese)", ar: "جبنة كريمية (Creamy Cheese)", en: "Creamy Cheese"}, allergens: ['lactose', 'gluten', 'wheat', 'soybeans', 'milk'] },
+            { id: 22, name: {ku: "فلامین هۆت (Flamin Hot)", ar: "فلامنج هوت (Flamin Hot)", en: "Flamin Hot"}, allergens: ['lactose', 'gluten', 'wheat', 'soybeans', 'milk', 'barley'] }
+        ]},
+        { groupName: "BUGLES", items: [
+            { id: 23, name: {ku: "مانگۆ و بیبەر (Mango Chilli)", ar: "مانجو وفلفل (Mango Chilli)", en: "Mango Chilli Chutney DFFS"}, allergens: ['lactose', 'gluten', 'wheat', 'milk'] },
+            { id: 24, name: {ku: "پەنیر و پیاز (Cheese & Onion)", ar: "جبنة وبصل (Cheese & Onion)", en: "Cheese & Onion Flavor"}, allergens: ['lactose', 'gluten', 'wheat', 'milk'] },
+            { id: 25, name: {ku: "کەتچاپ (Tomato Ketchup)", ar: "كاتشب الطماطم (Tomato Ketchup)", en: "Tomato Ketchup Flavor"}, allergens: ['gluten', 'mustard', 'wheat', 'barley'] }
+        ]}
+    ];
+
+    let database = [];
+    let currentLang = 'ku';
+    let flatList = [];
+    let currentActiveAllergen = '';
+
+    function initDatabase() {
+        const savedDB = localStorage.getItem('qc_database_full_v2');
+        if (savedDB) {
+            database = JSON.parse(savedDB);
+        } else {
+            database = JSON.parse(JSON.stringify(defaultDatabase));
+        }
+        buildLists();
+    }
+
+    function buildLists() {
+        flatList = [];
+        const selLine = document.getElementById('productLine');
+        const modalAddLine = document.getElementById('newGroupSelect');
+        const modalDelLine = document.getElementById('delGroupSelect');
+        
+        selLine.innerHTML = ''; modalAddLine.innerHTML = ''; modalDelLine.innerHTML = '';
+
+        database.forEach((cat, gIndex) => {
+            selLine.appendChild(new Option(cat.groupName, gIndex));
+            modalAddLine.appendChild(new Option(cat.groupName, gIndex));
+            modalDelLine.appendChild(new Option(cat.groupName, gIndex));
+            cat.items.forEach(item => {
+                item.groupId = gIndex;
+                flatList.push(item);
+            });
+        });
+    }
+
+    const i18n = {
+        ku: {
+            uiTitle: "سیستەمی کۆنتڕۆڵی ماددە هەستیارەکان", uiSub: "پشکنینی فەرمی بۆ پێداویستییەکانی شۆردنی ئامێرەکان",
+            lblLine: "هێڵی بەرهەمهێنان:", lblCurrent: "تامی ئێستا (لەسەر ئامێرەکەیە):", lblNext: "تامی داهاتوو (دەستی پێدەکەیت):", 
+            btnCheck: "پشکنینی فەرمی بکە", matrixHead: "داتابەیسی ماددە هەستیارەکان", matrixSub: "کلیک لە ناوەکان بکە بۆ زانیاری تەندروستی",
+            legTitle: "📋 ڕێنماییە فەرمییەکان", l1: "<span>⬇️</span> <div><strong>ئاڕاستەی بەرهەمهێنان:</strong> بەشێوەیەکی ئاسایی لە سەرەوە بۆ خوارەوەیە.</div>",
+            l2: "<span>💨</span> <div><strong>پاککردنەوە بە هەوا:</strong> گۆڕینی تام کە مەترسی حەساسییەتی نەبێت تەنها هەوای پێویستە.</div>",
+            l3: "<span>🚨</span> <div><strong>مەترسی حەساسییەت:</strong> ئەگەر ماددەیەک پەڕییەوە کە لە تامی داهاتوودا نەبوو، شۆردن ئیجبارییە.</div>",
+            l5: "<span>🟢</span> <div><strong>بەرهەمەکانی (FF):</strong> ناسک و بێ حەساسییەتن، مەترسی دروست ناکەن بۆ بەرهەمی دوای خۆیان.</div>",
+            l6: "<span>🍢</span> <div><strong>تامی کەباب:</strong> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە هەمیشە شۆردنی دەوێت.</div>",
+            l7: "<span>🌿</span> <div><strong>ماست و گیا:</strong> بەپێی یاسای ژمارە ٧، بۆ پاککردنەوەی ئامێرەکان لە وردیلەی گیاکان شۆردنی دەوێت.</div>",
+            sameT: "هیچ شۆردنێک پێویست نییە", sameD: "بەرهەمەکە هەمان تامە، دەتوانیت بەبێ کێشە بەردەوام بیت لە بەرهەمهێنان.",
+            ffT: "تەنها پاککردنەوە بە هەوا (Air Blow)", ffD: "<b>تامی سادە (FF):</b> تامی ئێستا بێ حەساسییەتە، پاککردنەوە بە هەوا بەسە بۆ دەستپێکردنی تامی داهاتوو.",
+            kababT: "پێویستە بە تەواوەتی بشۆرێت (Full Wash)", kababD: "<b>تامی کەباب:</b> بەپێی یاسای ژمارە ٦، بەهۆی بۆنە تیژەکەیەوە پێویستی بە شۆردن هەیە بۆ لابردنی کاریگەرییەکەی.",
+            yogurtT: "پێویستە بە تەواوەتی بشۆرێت (Full Wash)", yogurtD: "<b>ماست و گیا:</b> بەپێی یاسای ژمارە ٧، بۆ پاککردنەوەی وردیلەی گیاکان لەناو ئامێرەکاندا شۆردن ئیجبارییە.",
+            blockT: "پێویستە بە تەواوەتی بشۆرێت (Full Wash)", blockD: "<b>مەترسی حەساسییەت (Allergen Risk):</b> ماددەی هەستیار هەیە لە تامی ئێستا کە لە تامی داهاتوودا نییە، شۆردن ئیجبارییە.",
+            airT: "تەنها پاککردنەوە بە هەوا (Air Blow)", airD: "گۆڕینەکە سەلامەتە، هیچ ماددەیەکی هەستیاری نوێ ناپەڕێتەوە (Allergen Safe).",
+            al_name_lactose: "لاکتۆز", al_name_sulphites: "سولفیت", al_name_gluten: "گلۆتین", al_name_mustard: "خەردەل", al_name_wheat: "گەنم", al_name_soybeans: "فاسۆلیای سۆیا", al_name_milk: "شیر", al_name_barley: "جۆ",
+            warn_title: "ئاگاداری! مەترسی پەڕینەوەی ئەم ماددانە هەیە:", lblCurrAl: "پێکهاتەی تامی ئێستا:", lblNextAl: "پێکهاتەی تامی داهاتوو:", lblDetails: "زانیاری تەندروستی:", txtNoAllergens: "هیچ (Free From)",
+            txtSafeButWash: "بڕیاری فەرمی QC: لە ڕووی حەساسییەتەوە سەلامەتە، بەڵام بەهۆی جۆری تامەکەوە شۆردنی تەڕ ئیجبارییە.",
+            txtAllSafeAir: "بڕیاری فەرمی QC: تامی داهاتوو هەموو پێکهاتەکانی تامی پێشووی لەخۆگرتووە، سەد لە سەد سەلامەتە و تەنها هەوای پێویستە.",
+            info_ff_t: "🟢 Free From (بێ حەساسییەت)", info_ff_d: "بەرهەمی خاڵی لە حەساسییەت، سەلامەتن بۆ هەمووان.", info_lactose_t: "🔵 Lactose (لاکتۆز)", info_lactose_d: "شەکرێکی سروشتییە کە لە شیردا هەیە، بۆ هەندێک کەس کێشەی هەرس دروست دەکات.", info_sulphites_t: "🔵 Sulphites (سولفیت)", info_sulphites_d: "جۆرێکە لە پارێزەر (مەواد حافیزە) کە دەبێتە هۆی کاردانەوەی حەساسییەت.", info_gluten_t: "🔵 Gluten (گلۆتین)", info_gluten_d: "پڕۆتینێکە لە گەنم و جۆدا هەیە، بۆ نەخۆشانی سیلیاک (Celiac) مەترسیدارە.", info_mustard_t: "🟡 Mustard (خەردەل)", info_mustard_d: "بەهاراتێکە دەتوانێت کاردانەوەی توندی حەساسییەت دروست بکات.", info_wheat_t: "🟡 Wheat (گەنم)", info_wheat_d: "سەرچاوەی سەرەکی گلۆتینە و هەندێک کەس ڕاستەوخۆ حەساسییەتی بە گەنم هەیە.", info_soybeans_t: "🟡 Soybeans (فاسۆلیای سۆیا)", info_soybeans_d: "لە زۆر پێکهاتە و زەیتدا بەکاردێت و یەکێکە لە حەساسییەتە باوەکان.", info_milk_t: "🟡 Milk (شیر)", info_milk_d: "مەبەست لێی حەساسییەتە بە پڕۆتینی شیر (جیاوازە لە لاکتۆز).", info_barley_t: "🟡 Barley (جۆ)", info_barley_d: "دانەوێڵەیەکە کە سەرچاوەیەکی تری گلۆتینە.",
+            modTitle: "زیادکردنی تامی نوێ", modLine: "هەڵبژاردنی هێڵ (Group):", modNameKu: "ناوی تام (کوردی):", modNameAr: "ناوی تام (عەرەبی):", modNameEn: "ناوی تام (ئینگلیزی):", modType: "تایبەتمەندی تایبەت:", modFF: "سادە (Free From)", modKabab: "تامی کەباب", modYogurt: "ماست و گیا", modAllergens: "ماددە هەستیارەکان (Allergens):", modSave: "پاشەکەوتکردن", modCancel: "پاشگەزبوونەوە",
+            delTitle: "سڕینەوەی تام", delLine: "هەڵبژاردنی هێڵ (Group):", delFlavorLbl: "هەڵبژاردنی تام بۆ سڕینەوە:", delBtnSave: "سڕینەوەی یەکجاری", delConfirm: "دڵنیایت لە سڕینەوەی ئەم تامە بە یەکجاری؟", delSuccess: "تامەکە بە سەرکەوتوویی سڕایەوە!"
+        },
+        ar: {
+            uiTitle: "نظام الرقابة على مسببات الحساسية", uiSub: "الفحص الرسمي لمتطلبات الغسيل لآلات الإنتاج",
+            lblLine: "خط الإنتاج:", lblCurrent: "النكهة الحالية (على الآلة):", lblNext: "النكهة التالية (سيتم البدء بها):", btnCheck: "إجراء الفحص الرسمي", matrixHead: "قاعدة بيانات مسببات الحساسية", matrixSub: "انقر على الأسماء للحصول على المعلومات الصحية",
+            legTitle: "📋 التعليمات الرسمية", l1: "<span>⬇️</span> <div><strong>اتجاه الإنتاج:</strong> بشكل طبيعي يكون من الأعلى إلى الأسفل.</div>", l2: "<span>💨</span> <div><strong>التنظيف بالهواء:</strong> تغيير النكهة الذي لا يشكل خطر حساسية يتطلب الهواء فقط.</div>", l3: "<span>🚨</span> <div><strong>خطر الحساسية:</strong> إذا انتقلت مادة غير موجودة في النكهة التالية، فإن الغسيل إجباري.</div>", l5: "<span>🟢</span> <div><strong>منتجات (FF):</strong> خفيفة وخالية من الحساسية، لا تشكل خطراً على المنتج الذي يليها.</div>", l6: "<span>🍢</span> <div><strong>نكهة الكباب:</strong> وفقاً للقانون رقم 6، بسبب رائحتها القوية تحتاج دائماً إلى الغسيل.</div>", l7: "<span>🌿</span> <div><strong>اللبن والأعشاب:</strong> وفقاً للقانون رقم 7، لتنظيف الآلات من جزيئات الأعشاب، تحتاج إلى الغسيل.</div>",
+            sameT: "لا يتطلب أي غسيل", sameD: "المنتج له نفس النكهة، يمكنك الاستمرار في الإنتاج بدون أي مشكلة.", ffT: "فقط تنظيف بالهواء (Air Blow)", ffD: "<b>نكهة بسيطة (FF):</b> النكهة الحالية خالية من مسببات الحساسية، التنظيف بالهواء كافٍ للبدء بالنكهة التالية.", kababT: "يجب غسلها بالكامل (Full Wash)", kababD: "<b>نكهة الكباب:</b> وفقاً للقانون رقم 6، بسبب رائحتها القوية تحتاج إلى غسيل لإزالة تأثيرها.", yogurtT: "يجب غسلها بالكامل (Full Wash)", yogurtD: "<b>اللبن والأعشاب:</b> وفقاً للقانون رقم 7، لتنظيف الآلات من جزيئات الأعشاب، الغسيل إجباري.", blockT: "يجب غسلها بالكامل (Full Wash)", blockD: "<b>خطر الحساسية (Allergen Risk):</b> توجد مادة مسببة للحساسية في النكهة الحالية غير موجودة في النكهة التالية، الغسيل إجباري.", airT: "فقط تنظيف بالهواء (Air Blow)", airD: "التغيير آمن، لا تنتقل أي مادة جديدة مسببة للحساسية (Allergen Safe).",
+            al_name_lactose: "اللاكتوز", al_name_sulphites: "الكبريتات", al_name_gluten: "الغلوتين", al_name_mustard: "الخردل", al_name_wheat: "القمح", al_name_soybeans: "فول الصويا", al_name_milk: "الحليب", al_name_barley: "الشعير", warn_title: "تحذير! هناك خطر انتقال هذه المواد:", lblCurrAl: "مكونات النكهة الحالية:", lblNextAl: "مكونات النكهة التالية:", lblDetails: "المعلومات الصحية:", txtNoAllergens: "لا يوجد (Free From)", txtSafeButWash: "القرار الرسمي QC: آمن من حيث الحساسية، ولكن بسبب نوع النكهة (كباب/لبن) الغسيل الرطب إجباري.", txtAllSafeAir: "القرار الرسمي QC: النكهة التالية تحتوي على جميع مكونات النكهة السابقة، لذا فهي آمنة 100٪ وتحتاج فقط إلى الهواء.",
+            info_ff_t: "🟢 Free From (خالي من الحساسية)", info_ff_d: "منتجات خالية من مسببات الحساسية، آمنة للجميع.", info_lactose_t: "🔵 Lactose (اللاكتوز)", info_lactose_d: "سكر طبيعي موجود في الحليب، يسبب مشاكل في الهضم لبعض الأشخاص.", info_sulphites_t: "🔵 Sulphites (الكبريتات)", info_sulphites_d: "نوع من المواد الحافظة يمكن أن يسبب رد فعل تحسسي.", info_gluten_t: "🔵 Gluten (الغلوتين)", info_gluten_d: "بروتين موجود في القمح والشعير، خطير على مرضى الاضطرابات الهضمية (Celiac).", info_mustard_t: "🟡 Mustard (الخردل)", info_mustard_d: "توابل يمكن أن تسبب رد فعل تحسسي شديد.", info_wheat_t: "🟡 Wheat (القمح)", info_wheat_d: "المصدر الرئيسي للغلوتين، وبعض الناس لديهم حساسية مباشرة تجاه القمح.", info_soybeans_t: "🟡 Soybeans (فول الصويا)", info_soybeans_d: "يستخدم في العديد من المكونات والزيوت وهو أحد مسببات الحساسية الشائعة.", info_milk_t: "🟡 Milk (الحليب)", info_milk_d: "القصد منه هو الحساسية تجاه بروتين الحليب (مختلف عن اللاكتوز).", info_barley_t: "🟡 Barley (الشعير)", info_barley_d: "حبوب تعتبر مصدراً آخر للغلوتين.",
+            modTitle: "إضافة نكهة جديدة", modLine: "اختيار الخط (Group):", modNameKu: "اسم النكهة (كردي):", modNameAr: "اسم النكهة (عربي):", modNameEn: "اسم النكهة (إنجليزي):", modType: "خصائص خاصة:", modFF: "خالي من الحساسية (FF)", modKabab: "نكهة كباب", modYogurt: "لبن وأعشاب", modAllergens: "مسببات الحساسية (Allergens):", modSave: "حفظ النكهة", modCancel: "إلغاء",
+            delTitle: "حذف نكهة", delLine: "اختيار الخط (Group):", delFlavorLbl: "اختيار النكهة للحذف:", delBtnSave: "حذف نهائي", delConfirm: "هل أنت متأكد من حذف هذه النكهة نهائياً؟", delSuccess: "تم حذف النكهة بنجاح!"
+        },
+        en: {
+            uiTitle: "Allergen Control System", uiSub: "Official QC Check for Equipment Washing Requirements",
+            lblLine: "Product Line:", lblCurrent: "Current Flavor (On Machine):", lblNext: "Next Flavor (To Be Started):", btnCheck: "Run Official QC Check", matrixHead: "Allergen Database", matrixSub: "Click on items for health information",
+            legTitle: "📋 Official Guidelines", l1: "<span>⬇️</span> <div><strong>Production Direction:</strong> Naturally proceeds from top to bottom.</div>", l2: "<span>💨</span> <div><strong>Air Cleaning:</strong> A flavor changeover with no allergen risk requires only air cleaning.</div>", l3: "<span>🚨</span> <div><strong>Allergen Risk:</strong> If an allergen carries over that is not in the next flavor, a wash is mandatory.</div>", l5: "<span>🟢</span> <div><strong>Products (FF):</strong> Delicate and allergen-free, they pose no risk to the product that follows them.</div>", l6: "<span>🍢</span> <div><strong>Kabab Flavor:</strong> According to Rule No. 6, due to its pungent scent, it always requires a wash.</div>", l7: "<span>🌿</span> <div><strong>Yogurt & Herbs:</strong> According to Rule No. 7, washing is required to clean the machines from herb particles.</div>",
+            sameT: "NO CLEANING REQUIRED", sameD: "The product is the exact same flavor, you can continue production without any issues.", ffT: "AIR BLOW ONLY", ffD: "<b>Simple Flavor (FF):</b> The current flavor is allergen-free. Air cleaning is sufficient to start the next flavor.", kababT: "FULL WET WASH REQUIRED", kababD: "<b>Kabab Flavor:</b> According to Rule No. 6, due to its pungent scent, a wash is required to remove its effect.", yogurtT: "FULL WET WASH REQUIRED", yogurtD: "<b>Yogurt & Herbs:</b> According to Rule No. 7, washing is mandatory to clean the machines from herb particles.", blockT: "FULL WET WASH REQUIRED", blockD: "<b>Allergen Risk (Allergen Risk):</b> There is an allergen in the current flavor that is not present in the next flavor. A full wash is mandatory.", airT: "AIR BLOW ONLY", airD: "The changeover is safe. No new allergens are carried over (Allergen Safe).",
+            al_name_lactose: "Lactose", al_name_sulphites: "Sulphites", al_name_gluten: "Gluten", al_name_mustard: "Mustard", al_name_wheat: "Wheat", al_name_soybeans: "Soybeans", al_name_milk: "Milk", al_name_barley: "Barley", warn_title: "Warning! Risk of cross-contamination for:", lblCurrAl: "Current Flavor Ingredients:", lblNextAl: "Next Flavor Ingredients:", lblDetails: "Health Information:", txtNoAllergens: "None (Free From)", txtSafeButWash: "Official QC Decision: Safe in terms of allergens, but due to flavor properties (Kabab/Yogurt), wet wash is mandatory.", txtAllSafeAir: "Official QC Decision: The next flavor contains all ingredients of the previous one. 100% safe, air blow only.",
+            info_ff_t: "🟢 Free From (Allergen-Free)", info_ff_d: "Products free of allergens, safe for everyone.", info_lactose_t: "🔵 Lactose", info_lactose_d: "A natural sugar found in milk, causing digestive issues for some people.", info_sulphites_t: "🔵 Sulphites", info_sulphites_d: "A type of preservative that can cause allergic reactions.", info_gluten_t: "🔵 Gluten", info_gluten_d: "A protein found in wheat and barley, dangerous for Celiac patients.", info_mustard_t: "🟡 Mustard", info_mustard_d: "A spice that can cause severe allergic reactions.", info_wheat_t: "🟡 Wheat", info_wheat_d: "The main source of gluten, and some people have a direct allergy to wheat.", info_soybeans_t: "🟡 Soybeans", info_soybeans_d: "Used in many ingredients and oils, it is a common allergen.", info_milk_t: "🟡 Milk", info_milk_d: "This refers to an allergy to milk protein (different from Lactose).", info_barley_t: "🟡 Barley", info_barley_d: "A grain that is another source of gluten.",
+            modTitle: "Add New Flavor", modLine: "Select Line (Group):", modNameKu: "Flavor Name (Kurdish):", modNameAr: "Flavor Name (Arabic):", modNameEn: "Flavor Name (English):", modType: "Special Properties:", modFF: "Free From (FF)", modKabab: "Kabab Flavor", modYogurt: "Yogurt & Herbs", modAllergens: "Allergens Checklist:", modSave: "Save Flavor", modCancel: "Cancel",
+            delTitle: "Delete Flavor", delLine: "Select Line (Group):", delFlavorLbl: "Select Flavor to Delete:", delBtnSave: "Delete Permanently", delConfirm: "Are you sure you want to permanently delete this flavor?", delSuccess: "Flavor deleted successfully!"
+        }
+    };
+
+    function updateDropdowns(preserveSelection = true) {
+        const selCur = document.getElementById('currFlavor');
+        const selNxt = document.getElementById('nextFlavor');
+        
+        const curVal = selCur.value;
+        const nxtVal = selNxt.value;
+        
+        selCur.innerHTML = '';
+        selNxt.innerHTML = '';
+        
+        const selectedCatIndex = document.getElementById('productLine').value;
+        if(database[selectedCatIndex]) {
+            database[selectedCatIndex].items.forEach(item => {
+                const displayName = item.name[currentLang];
+                selCur.appendChild(new Option(displayName, item.id));
+                selNxt.appendChild(new Option(displayName, item.id));
+            });
+        }
+
+        if (preserveSelection && curVal && nxtVal && Array.from(selCur.options).some(o => o.value === curVal)) {
+            selCur.value = curVal;
+            selNxt.value = nxtVal;
+        } else {
+            document.getElementById('resultBox').style.display = 'none';
+        }
+    }
+
+    function changeLang(lang, btnElement) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        if (btnElement) btnElement.classList.add('active');
+        
+        document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+        const t = i18n[lang];
+
+        document.getElementById('uiTitle').innerText = t.uiTitle; document.getElementById('uiSub').innerText = t.uiSub;
+        document.getElementById('txtLine').innerText = t.lblLine; document.getElementById('txtCurrent').innerText = t.lblCurrent; document.getElementById('txtNext').innerText = t.lblNext;
+        document.getElementById('btnCheck').innerHTML = t.btnCheck + ` <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        
+        document.getElementById('matrixHead').innerText = t.matrixHead; document.getElementById('matrixSub').innerText = t.matrixSub;
+        document.getElementById('legTitle').innerText = t.legTitle;
+        document.getElementById('l1').innerHTML = t.l1; document.getElementById('l2').innerHTML = t.l2; document.getElementById('l3').innerHTML = t.l3;
+        document.getElementById('l5').innerHTML = t.l5; document.getElementById('l6').innerHTML = t.l6; document.getElementById('l7').innerHTML = t.l7;
+
+        // Modal Add
+        document.getElementById('modTitle').innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> ` + t.modTitle;
+        document.getElementById('modLine').innerText = t.modLine; document.getElementById('modNameKu').innerText = t.modNameKu; document.getElementById('modNameAr').innerText = t.modNameAr;
+        document.getElementById('modNameEn').innerText = t.modNameEn; document.getElementById('modType').innerText = t.modType; document.getElementById('modFF').innerText = t.modFF;
+        document.getElementById('modKabab').innerText = t.modKabab; document.getElementById('modYogurt').innerText = t.modYogurt; document.getElementById('modAllergens').innerText = t.modAllergens;
+        document.getElementById('modSave').innerText = t.modSave; document.getElementById('modCancel').innerText = t.modCancel;
+
+        // Modal Delete
+        document.getElementById('delTitle').innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> ` + t.delTitle;
+        document.getElementById('delLine').innerText = t.delLine; document.getElementById('delFlavorLbl').innerText = t.delFlavorLbl; 
+        document.getElementById('delBtnSave').innerText = t.delBtnSave; document.getElementById('delCancel').innerText = t.modCancel;
+        
+        updateDropdowns(true);
+        if(document.getElementById('deleteFlavorModal').style.display === 'flex') updateDelFlavorSelect();
+        if(document.getElementById('resultBox').style.display === 'block') checkWash(); 
+        if(currentActiveAllergen !== '') showInfo(currentActiveAllergen);
+    }
+
+    function checkWash() {
+        const selCur = document.getElementById('currFlavor');
+        const selNxt = document.getElementById('nextFlavor');
+        
+        const currItem = flatList.find(f => f.id === parseInt(selCur.value));
+        const nextItem = flatList.find(f => f.id === parseInt(selNxt.value));
+        const box = document.getElementById('resultBox');
+        const title = document.getElementById('resTitle');
+        const desc = document.getElementById('resDesc');
+        const t = i18n[currentLang];
+
+        if(!currItem || !nextItem) return;
+
+        box.style.animation = 'none'; box.offsetHeight; 
+        box.style.animation = 'slideDown 0.3s ease-out forwards';
+        box.style.display = 'block';
+
+        let innerTitle = ""; let innerDesc = ""; let iconHtml = "";
+        const currAllergens = currItem.allergens || [];
+        const nextAllergens = nextItem.allergens || [];
+        const dangerAllergens = currAllergens.filter(a => !nextAllergens.includes(a));
+
+        if (currItem.id === nextItem.id) {
+            box.className = 'no-wash'; 
+            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+            innerTitle = iconHtml + t.sameT; innerDesc = t.sameD;
+        } else if (currItem.isKabab || currItem.isYogurt || dangerAllergens.length > 0) {
+            box.className = 'red-wash';
+            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+            if (currItem.isKabab) { innerTitle = iconHtml + t.kababT; innerDesc = t.kababD; }
+            else if (currItem.isYogurt) { innerTitle = iconHtml + t.yogurtT; innerDesc = t.yogurtD; }
+            else { innerTitle = iconHtml + t.blockT; innerDesc = t.blockD; }
+        } else {
+            box.className = 'air-wash';
+            iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>`;
+            if (currItem.isFF) { innerTitle = iconHtml + t.ffT; innerDesc = t.ffD; } 
+            else { innerTitle = iconHtml + t.airT; innerDesc = t.airD; }
+        }
+
+        if (dangerAllergens.length > 0 && currItem.id !== nextItem.id) {
+            const mappedNames = dangerAllergens.map(a => t['al_name_' + a]).join('، ');
+            innerDesc += `<div class="allergen-warning"><strong><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='12'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg> ${t.warn_title}</strong> ${mappedNames}</div>`;
+        }
+
+        const formatAl = (item) => {
+            if (item.isFF) return `<span class="al-tag safe">${t.txtNoAllergens}</span>`;
+            if (item.allergens && item.allergens.length > 0) {
+                return `<div class="al-tags">` + item.allergens.map(a => `<span class="al-tag">${t['al_name_' + a]}</span>`).join('') + `</div>`;
+            }
+            return `<span class="al-tag safe">${t.txtNoAllergens}</span>`;
+        };
+
+        let compareHtml = `<div class="allergen-compare-box">
+            <div class="al-row"><strong>${t.lblCurrAl}</strong><div class="flavor-name-display">${currItem.name[currentLang]}</div>${formatAl(currItem)}</div>
+            <div class="al-row" style="margin-top: 15px;"><strong>${t.lblNextAl}</strong><div class="flavor-name-display">${nextItem.name[currentLang]}</div>${formatAl(nextItem)}</div>`;
+
+        const uniqueAllergens = [...new Set([...currAllergens, ...nextAllergens])];
+        if(uniqueAllergens.length > 0) {
+            compareHtml += `<div class="al-details">`;
+            if (dangerAllergens.length === 0 && currItem.id !== nextItem.id) {
+                if (box.className === 'red-wash') { compareHtml += `<div class="alert-box red">${t.txtSafeButWash}</div>`; } 
+                else if (box.className === 'air-wash') { compareHtml += `<div class="alert-box air">${t.txtAllSafeAir}</div>`; }
+            }
+            compareHtml += `<strong>${t.lblDetails}</strong><ul>`;
+            uniqueAllergens.forEach(a => { compareHtml += `<li><strong>${t['al_name_' + a]}:</strong> ${t['info_' + a + '_d']}</li>`; });
+            compareHtml += `</ul></div>`;
+        } else {
+            if (box.className === 'red-wash') { compareHtml += `<div class="al-details" style="color: var(--text-h); font-weight: 700;">${t.txtSafeButWash}</div>`; } 
+            else { compareHtml += `<div class="al-details" style="color: var(--text-h); font-weight: 700;">${t.txtAllSafeAir}</div>`; }
+        }
+
+        title.innerHTML = innerTitle; desc.innerHTML = innerDesc + compareHtml + `</div>`;
+    }
+
+    function showInfo(allergen) {
+        currentActiveAllergen = allergen;
+        const box = document.getElementById('allergenInfoBox');
+        const tTitle = document.getElementById('alTitle'); const tDesc = document.getElementById('alDesc');
+        const t = i18n[currentLang];
+        tTitle.innerHTML = t['info_' + allergen + '_t']; tDesc.innerHTML = t['info_' + allergen + '_d'];
+        box.style.animation = 'none'; box.offsetHeight; box.style.animation = 'slideDown 0.2s ease-out forwards'; box.style.display = 'block';
+    }
+
+    // Modal Add Logic
+    function openAddModal() { document.getElementById('addFlavorModal').style.display = 'flex'; }
+    function closeAddModal() { document.getElementById('addFlavorModal').style.display = 'none'; document.getElementById('newFlavorForm').reset(); }
+
+    function saveNewFlavor(event) {
+        event.preventDefault();
+        const gIndex = document.getElementById('newGroupSelect').value;
+        const nameKu = document.getElementById('newNameKu').value.trim();
+        const nameAr = document.getElementById('newNameAr').value.trim();
+        const nameEn = document.getElementById('newNameEn').value.trim();
+        const isFF = document.getElementById('newFF').checked;
+        const isKabab = document.getElementById('newKabab').checked;
+        const isYogurt = document.getElementById('newYogurt').checked;
+        
+        const allergens = [];
+        document.querySelectorAll('.al-check:checked').forEach(cb => { allergens.push(cb.value); });
+
+        let maxId = -1; flatList.forEach(item => { if(item.id > maxId) maxId = item.id; });
+        const newId = maxId + 1;
+
+        database[gIndex].items.push({ id: newId, name: { ku: nameKu, ar: nameAr, en: nameEn }, isFF: isFF, isKabab: isKabab, isYogurt: isYogurt, allergens: allergens });
+        localStorage.setItem('qc_database_full_v2', JSON.stringify(database));
+        
+        buildLists(); updateDropdowns(true); closeAddModal();
+        alert(currentLang === 'ku' ? "تامەکە بە سەرکەوتوویی زیادکرا!" : (currentLang === 'ar' ? "تمت الإضافة بنجاح!" : "Flavor added successfully!"));
+    }
+
+    // Modal Delete Logic
+    function openDelModal() { 
+        document.getElementById('deleteFlavorModal').style.display = 'flex'; 
+        updateDelFlavorSelect();
+    }
+    function closeDelModal() { 
+        document.getElementById('deleteFlavorModal').style.display = 'none'; 
+    }
+    function updateDelFlavorSelect() {
+        const delSelect = document.getElementById('delFlavorSelect');
+        const gIndex = document.getElementById('delGroupSelect').value;
+        delSelect.innerHTML = '';
+        if(database[gIndex]) {
+            database[gIndex].items.forEach(item => {
+                delSelect.appendChild(new Option(item.name[currentLang], item.id));
+            });
+        }
+    }
+
+    function deleteFlavor(event) {
+        event.preventDefault();
+        const gIndex = document.getElementById('delGroupSelect').value;
+        const fId = parseInt(document.getElementById('delFlavorSelect').value);
+        
+        const t = i18n[currentLang];
+        if(!confirm(t.delConfirm)) return;
+
+        database[gIndex].items = database[gIndex].items.filter(item => item.id !== fId);
+        localStorage.setItem('qc_database_full_v2', JSON.stringify(database));
+        
+        buildLists(); updateDropdowns(false); closeDelModal(); document.getElementById('resultBox').style.display = 'none';
+        alert(t.delSuccess);
+    }
+
+    // Initialize
+    initDatabase();
+    updateDropdowns(false);
+</script>
+
+</body>
+</html>
