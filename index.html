@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>QC Allergen Matrix - Green Iraq</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary: #059669; 
@@ -324,8 +329,6 @@
         .legend-list li strong { color: var(--text-h); font-weight: 800; display: block; margin-bottom: 2px; }
 
         /* --- 📱 سیستەمی گونجاندن بۆ شاشەکان (Responsive Design) --- */
-        
-        /* بۆ شاشەی مامناوەند و ئایپاد */
         @media (max-width: 768px) {
             body { padding: 25px 15px; }
             .container { padding: 35px 25px; }
@@ -336,49 +339,35 @@
             .controls { width: 100%; justify-content: center; }
         }
 
-        /* بۆ مۆبایلە بچووکەکان */
         @media (max-width: 480px) {
             body { padding: 15px 10px; }
             .container { padding: 25px 15px; border-radius: 20px; }
-            
             .brand-info h1 { font-size: 20px; }
             .brand-info span { font-size: 12px; }
-            
             .icon-btn { width: 40px; height: 40px; font-size: 16px; }
-            
             .title-area h2 { font-size: 18px; }
             .title-area p { font-size: 13.5px; }
-            
             .lang-btn { padding: 8px; font-size: 13px; }
-            
             select, input[type="text"] { padding: 14px 15px; font-size: 14px; }
             label { font-size: 13.5px; }
-            
             .btn-check, .btn-primary { padding: 15px; font-size: 15px; }
             .btn-outline { padding: 14px; font-size: 14.5px; }
-            
             #resultBox, .allergen-matrix-container, .legend-section { padding: 20px 15px; }
-            
             .status-title { font-size: 17px; }
             .status-desc { font-size: 13.5px; }
-            
             .allergen-warning strong { font-size: 13.5px; }
             .al-row strong { font-size: 12.5px; }
             .flavor-name-display { font-size: 14px; }
             .al-tag { font-size: 12px; padding: 5px 10px; }
-            
             .modal-box { padding: 25px 15px; border-radius: 20px; }
             .modal-header h3 { font-size: 16px; }
             .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
-            
             .matrix-grid { gap: 6px; }
             .m-item { padding: 8px 12px; font-size: 12px; flex: 1 1 calc(50% - 6px); text-align: center; }
-            
             .legend-title { font-size: 16px; }
             .legend-list li { font-size: 13px; }
         }
         
-        /* بۆ مۆبایلە زۆر بچووکەکان (وەک iPhone SE کۆن) */
         @media (max-width: 360px) {
             .m-item { flex: 1 1 100%; }
             .brand-info h1 { font-size: 18px; }
@@ -577,6 +566,19 @@
 </div>
 
 <script>
+    // --- بەستنەوەی Firebase ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyAinAnr2XnsLa8TjsMqF9jeum-hG_WozuE",
+      authDomain: "zanyardawdproject.firebaseapp.com",
+      projectId: "zanyardawdproject",
+      storageBucket: "zanyardawdproject.firebasestorage.app",
+      messagingSenderId: "420938714179",
+      appId: "1:420938714179:web:e88ab53d2c7c71419558f6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const dbRef = db.ref('flavors_database');
+
     function toggleTheme() {
         const html = document.documentElement;
         const btn = document.getElementById('themeToggle');
@@ -631,14 +633,19 @@
     let flatList = [];
     let currentActiveAllergen = '';
 
+    // کارکردنی ئۆنلاین لەگەڵ فایەربەیس
     function initDatabase() {
-        const savedDB = localStorage.getItem('qc_database_full_v2');
-        if (savedDB) {
-            database = JSON.parse(savedDB);
-        } else {
-            database = JSON.parse(JSON.stringify(defaultDatabase));
-        }
-        buildLists();
+        dbRef.on('value', (snapshot) => {
+            if (snapshot.exists()) {
+                database = snapshot.val();
+                buildLists();
+                updateDropdowns(true);
+            } else {
+                // ئەگەر داتابەیسەکە خاڵی بوو، لیستە بنەڕەتییەکەی تێ بکە
+                database = JSON.parse(JSON.stringify(defaultDatabase));
+                dbRef.set(database);
+            }
+        });
     }
 
     function buildLists() {
@@ -653,11 +660,18 @@
             selLine.appendChild(new Option(cat.groupName, gIndex));
             modalAddLine.appendChild(new Option(cat.groupName, gIndex));
             modalDelLine.appendChild(new Option(cat.groupName, gIndex));
-            cat.items.forEach(item => {
-                item.groupId = gIndex;
-                flatList.push(item);
-            });
+            
+            if(cat.items) {
+                cat.items.forEach(item => {
+                    item.groupId = gIndex;
+                    flatList.push(item);
+                });
+            }
         });
+        
+        if(document.getElementById('deleteFlavorModal').style.display === 'flex') {
+            updateDelFlavorSelect();
+        }
     }
 
     const i18n = {
@@ -683,7 +697,7 @@
             txtAllSafeAir: "بڕیاری فەرمی QC: تامی داهاتوو هەموو پێکهاتەکانی تامی پێشووی لەخۆگرتووە، سەد لە سەد سەلامەتە و تەنها هەوای پێویستە.",
             info_ff_t: "🟢 Free From (بێ حەساسییەت)", info_ff_d: "بەرهەمی خاڵی لە حەساسییەت، سەلامەتن بۆ هەمووان.", info_lactose_t: "🔵 Lactose (لاکتۆز)", info_lactose_d: "شەکرێکی سروشتییە کە لە شیردا هەیە، بۆ هەندێک کەس کێشەی هەرس دروست دەکات.", info_sulphites_t: "🔵 Sulphites (سولفیت)", info_sulphites_d: "جۆرێکە لە پارێزەر (مەواد حافیزە) کە دەبێتە هۆی کاردانەوەی حەساسییەت.", info_gluten_t: "🔵 Gluten (گلۆتین)", info_gluten_d: "پڕۆتینێکە لە گەنم و جۆدا هەیە، بۆ نەخۆشانی سیلیاک (Celiac) مەترسیدارە.", info_mustard_t: "🟡 Mustard (خەردەل)", info_mustard_d: "بەهاراتێکە دەتوانێت کاردانەوەی توندی حەساسییەت دروست بکات.", info_wheat_t: "🟡 Wheat (گەنم)", info_wheat_d: "سەرچاوەی سەرەکی گلۆتینە و هەندێک کەس ڕاستەوخۆ حەساسییەتی بە گەنم هەیە.", info_soybeans_t: "🟡 Soybeans (فاسۆلیای سۆیا)", info_soybeans_d: "لە زۆر پێکهاتە و زەیتدا بەکاردێت و یەکێکە لە حەساسییەتە باوەکان.", info_milk_t: "🟡 Milk (شیر)", info_milk_d: "مەبەست لێی حەساسییەتە بە پڕۆتینی شیر (جیاوازە لە لاکتۆز).", info_barley_t: "🟡 Barley (جۆ)", info_barley_d: "دانەوێڵەیەکە کە سەرچاوەیەکی تری گلۆتینە.",
             modTitle: "زیادکردنی تامی نوێ", modLine: "هەڵبژاردنی هێڵ (Group):", modNameKu: "ناوی تام (کوردی):", modNameAr: "ناوی تام (عەرەبی):", modNameEn: "ناوی تام (ئینگلیزی):", modType: "تایبەتمەندی تایبەت:", modFF: "سادە (Free From)", modKabab: "تامی کەباب", modYogurt: "ماست و گیا", modAllergens: "ماددە هەستیارەکان (Allergens):", modSave: "پاشەکەوتکردن", modCancel: "پاشگەزبوونەوە",
-            delTitle: "سڕینەوەی تام", delLine: "هەڵبژاردنی هێڵ (Group):", delFlavorLbl: "هەڵبژاردنی تام بۆ سڕینەوە:", delBtnSave: "سڕینەوەی یەکجاری", delConfirm: "دڵنیایت لە سڕینەوەی ئەم تامە بە یەکجاری؟", delSuccess: "تامەکە بە سەرکەوتوویی سڕایەوە!"
+            delTitle: "سڕینەوەی تام", delLine: "هەڵبژاردنی هێڵ (Group):", delFlavorLbl: "هەڵبژاردنی تام بۆ سڕینەوە:", delBtnSave: "سڕینەوەی یەکجاری", delConfirm: "دڵنیایت لە سڕینەوەی ئەم تامە بە یەکجاری؟", delSuccess: "تامەکە بە سەرکەوتوویی سڕایەوە لای هەمووان!"
         },
         ar: {
             uiTitle: "نظام الرقابة على مسببات الحساسية", uiSub: "الفحص الرسمي لمتطلبات الغسيل لآلات الإنتاج",
@@ -703,7 +717,7 @@
             al_name_lactose: "Lactose", al_name_sulphites: "Sulphites", al_name_gluten: "Gluten", al_name_mustard: "Mustard", al_name_wheat: "Wheat", al_name_soybeans: "Soybeans", al_name_milk: "Milk", al_name_barley: "Barley", warn_title: "Warning! Risk of cross-contamination for:", lblCurrAl: "Current Flavor Ingredients:", lblNextAl: "Next Flavor Ingredients:", lblDetails: "Health Information:", txtNoAllergens: "None (Free From)", txtSafeButWash: "Official QC Decision: Safe in terms of allergens, but due to flavor properties (Kabab/Yogurt), wet wash is mandatory.", txtAllSafeAir: "Official QC Decision: The next flavor contains all ingredients of the previous one. 100% safe, air blow only.",
             info_ff_t: "🟢 Free From (Allergen-Free)", info_ff_d: "Products free of allergens, safe for everyone.", info_lactose_t: "🔵 Lactose", info_lactose_d: "A natural sugar found in milk, causing digestive issues for some people.", info_sulphites_t: "🔵 Sulphites", info_sulphites_d: "A type of preservative that can cause allergic reactions.", info_gluten_t: "🔵 Gluten", info_gluten_d: "A protein found in wheat and barley, dangerous for Celiac patients.", info_mustard_t: "🟡 Mustard", info_mustard_d: "A spice that can cause severe allergic reactions.", info_wheat_t: "🟡 Wheat", info_wheat_d: "The main source of gluten, and some people have a direct allergy to wheat.", info_soybeans_t: "🟡 Soybeans", info_soybeans_d: "Used in many ingredients and oils, it is a common allergen.", info_milk_t: "🟡 Milk", info_milk_d: "This refers to an allergy to milk protein (different from Lactose).", info_barley_t: "🟡 Barley", info_barley_d: "A grain that is another source of gluten.",
             modTitle: "Add New Flavor", modLine: "Select Line (Group):", modNameKu: "Flavor Name (Kurdish):", modNameAr: "Flavor Name (Arabic):", modNameEn: "Flavor Name (English):", modType: "Special Properties:", modFF: "Free From (FF)", modKabab: "Kabab Flavor", modYogurt: "Yogurt & Herbs", modAllergens: "Allergens Checklist:", modSave: "Save Flavor", modCancel: "Cancel",
-            delTitle: "Delete Flavor", delLine: "Select Line (Group):", delFlavorLbl: "Select Flavor to Delete:", delBtnSave: "Delete Permanently", delConfirm: "Are you sure you want to permanently delete this flavor?", delSuccess: "Flavor deleted successfully!"
+            delTitle: "Delete Flavor", delLine: "Select Line (Group):", delFlavorLbl: "Select Flavor to Delete:", delBtnSave: "Delete Permanently", delConfirm: "Are you sure you want to permanently delete this flavor?", delSuccess: "Flavor deleted successfully for everyone!"
         }
     };
 
@@ -718,7 +732,7 @@
         selNxt.innerHTML = '';
         
         const selectedCatIndex = document.getElementById('productLine').value;
-        if(database[selectedCatIndex]) {
+        if(database[selectedCatIndex] && database[selectedCatIndex].items) {
             database[selectedCatIndex].items.forEach(item => {
                 const displayName = item.name[currentLang];
                 selCur.appendChild(new Option(displayName, item.id));
@@ -871,12 +885,17 @@
 
         let maxId = -1; flatList.forEach(item => { if(item.id > maxId) maxId = item.id; });
         const newId = maxId + 1;
-
-        database[gIndex].items.push({ id: newId, name: { ku: nameKu, ar: nameAr, en: nameEn }, isFF: isFF, isKabab: isKabab, isYogurt: isYogurt, allergens: allergens });
-        localStorage.setItem('qc_database_full_v2', JSON.stringify(database));
         
-        buildLists(); updateDropdowns(true); closeAddModal();
-        alert(currentLang === 'ku' ? "تامەکە بە سەرکەوتوویی زیادکرا!" : (currentLang === 'ar' ? "تمت الإضافة بنجاح!" : "Flavor added successfully!"));
+        if (!database[gIndex].items) { database[gIndex].items = []; }
+        database[gIndex].items.push({ id: newId, name: { ku: nameKu, ar: nameAr, en: nameEn }, isFF: isFF, isKabab: isKabab, isYogurt: isYogurt, allergens: allergens });
+        
+        // بەرزکردنەوەی گۆڕانکارییەکە بۆ فایەربەیس
+        dbRef.set(database).then(() => {
+            closeAddModal();
+            alert(currentLang === 'ku' ? "تامەکە بە سەرکەوتوویی زیادکرا!" : (currentLang === 'ar' ? "تمت الإضافة بنجاح!" : "Flavor added successfully!"));
+        }).catch((error) => {
+            alert("کێشەیەک هەیە لە ئینتەرنێت، نەتوانرا سەیڤ بکرێت.");
+        });
     }
 
     // Modal Delete Logic
@@ -891,7 +910,7 @@
         const delSelect = document.getElementById('delFlavorSelect');
         const gIndex = document.getElementById('delGroupSelect').value;
         delSelect.innerHTML = '';
-        if(database[gIndex]) {
+        if(database[gIndex] && database[gIndex].items) {
             database[gIndex].items.forEach(item => {
                 delSelect.appendChild(new Option(item.name[currentLang], item.id));
             });
@@ -907,15 +926,19 @@
         if(!confirm(t.delConfirm)) return;
 
         database[gIndex].items = database[gIndex].items.filter(item => item.id !== fId);
-        localStorage.setItem('qc_database_full_v2', JSON.stringify(database));
         
-        buildLists(); updateDropdowns(false); closeDelModal(); document.getElementById('resultBox').style.display = 'none';
-        alert(t.delSuccess);
+        // سڕینەوە لە فایەربەیس
+        dbRef.set(database).then(() => {
+            closeDelModal(); 
+            document.getElementById('resultBox').style.display = 'none';
+            alert(t.delSuccess);
+        }).catch((error) => {
+            alert("کێشەیەک هەیە لە ئینتەرنێت، نەتوانرا بسڕێتەوە.");
+        });
     }
 
     // Initialize
     initDatabase();
-    updateDropdowns(false);
 </script>
 
 </body>
