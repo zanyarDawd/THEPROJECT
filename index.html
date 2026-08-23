@@ -328,7 +328,6 @@
         .legend-list li span { background: var(--bg-surface); padding: 6px 8px; border-radius: 10px; font-size: 15px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-shrink: 0;}
         .legend-list li strong { color: var(--text-h); font-weight: 800; display: block; margin-bottom: 2px; }
 
-        /* --- 📱 سیستەمی گونجاندن بۆ شاشەکان (Responsive Design) --- */
         @media (max-width: 768px) {
             body { padding: 25px 15px; }
             .container { padding: 35px 25px; }
@@ -570,6 +569,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyAinAnr2XnsLa8TjsMqF9jeum-hG_WozuE",
       authDomain: "zanyardawdproject.firebaseapp.com",
+      databaseURL: "https://zanyardawdproject-default-rtdb.firebaseio.com", // <-- ئەم هێڵە کێشەکەی چارەسەر کرد
       projectId: "zanyardawdproject",
       storageBucket: "zanyardawdproject.firebasestorage.app",
       messagingSenderId: "420938714179",
@@ -589,7 +589,6 @@
         }
     }
 
-    // داتابەیسە بنەڕەتییەکە کە بۆ یەکەمجار ئیش دەکات
     const defaultDatabase = [
         { groupName: "PC LAY'S", items: [
             { id: 0, name: {ku: "خوێ (Salt)", ar: "ملح (Salt)", en: "Salt"}, isFF: true, allergens: [] },
@@ -634,18 +633,25 @@
     let flatList = [];
     let currentActiveAllergen = '';
 
-    // کارکردنی ئۆنلاین لەگەڵ فایەربەیس
+    // کارکردنی ئۆنلاین بەشێوازی پارێزراو (Anti-Crash)
     function initDatabase() {
+        // یەکەمجار داتاکە لەناو سایتەکە خۆیەوە بار دەکات بۆ ئەوەی هەرگیز شاشەکە خاڵی نەبێت
+        database = JSON.parse(JSON.stringify(defaultDatabase));
+        buildLists();
+        updateDropdowns(false);
+
+        // پاشان هەوڵ دەدات لە فایەربەیسەوە بیهێنێت ئەگەر ئینتەرنێت هەبوو
         dbRef.on('value', (snapshot) => {
             if (snapshot.exists()) {
                 database = snapshot.val();
                 buildLists();
                 updateDropdowns(true);
             } else {
-                // ئەگەر داتابەیسەکە خاڵی بوو، لیستە بنەڕەتییەکەی تێ بکە
-                database = JSON.parse(JSON.stringify(defaultDatabase));
+                // ئەگەر فایەربەیسەکە خاڵی بوو، داتا بنەڕەتییەکەی تێ بکە
                 dbRef.set(database);
             }
+        }, (error) => {
+            console.error("نەتوانرا لە فایەربەیسەوە بار بکرێت، کێشە نییە داتا لۆکاڵییەکە بەکاردێت:", error);
         });
     }
 
