@@ -101,6 +101,20 @@
         [dir="ltr"] .allergen-warning { border-left: 4px solid var(--wash-full-border); }
         .allergen-warning strong { font-size: 14.5px; display: flex; align-items: center; gap: 6px; }
         
+        /* بۆکسەکانی بەراوردکردن و ڕوونکردنەوەی حەساسییەت */
+        .allergen-compare-box { margin-top: 25px; padding: 20px; background-color: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; box-shadow: var(--shadow-sm); }
+        .al-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .al-row:last-child { margin-bottom: 0; }
+        .al-row strong { font-size: 13.5px; color: var(--text-mute); display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
+        .flavor-name-display { font-size: 15px; font-weight: 800; color: var(--text-h); margin-bottom: 4px; }
+        .al-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .al-tag { background: var(--bg-body); padding: 6px 12px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); font-weight: 700; color: var(--text-h); }
+        .al-tag.safe { background: var(--wash-none-bg); color: var(--primary); border-color: var(--wash-none-border); }
+        .al-details { margin-top: 25px; font-size: 13.5px; border-top: 1px solid var(--border); padding-top: 20px; }
+        .al-details ul { margin: 10px 0 0 0; padding-inline-start: 20px; color: var(--text-p); }
+        .al-details li { margin-bottom: 8px; line-height: 1.7; }
+        .al-details li strong { color: var(--text-h); }
+        
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px; animation: fadeIn 0.2s ease-out; }
         .modal-box { background: var(--bg-surface); width: 100%; max-width: 550px; border-radius: 24px; padding: 30px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; position: relative; animation: slideDown 0.3s ease-out; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
@@ -621,24 +635,60 @@
         let innerTitle = ""; let innerDesc = ""; let iconHtml = "";
         const currAllergens = currItem.allergens || []; const nextAllergens = nextItem.allergens || [];
         const dangerAllergens = currAllergens.filter(a => !nextAllergens.includes(a));
+        
+        let decisionReason = ""; // بۆکسێک بۆ ڕوونکردنەوەی بڕیارەکە
 
         if (currItem.id === nextItem.id) {
             box.className = 'no-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
             innerTitle = iconHtml + t.sameT; innerDesc = t.sameD;
         } else if (currItem.isKabab || currItem.isYogurt || dangerAllergens.length > 0) {
             box.className = 'red-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
-            if (currItem.isKabab) { innerTitle = iconHtml + t.kababT; innerDesc = t.kababD; }
-            else if (currItem.isYogurt) { innerTitle = iconHtml + t.yogurtT; innerDesc = t.yogurtD; }
-            else { innerTitle = iconHtml + t.blockT; innerDesc = t.blockD; }
+            if (currItem.isKabab) { innerTitle = iconHtml + t.kababT; innerDesc = t.kababD; decisionReason = t.txtSafeButWash || t.kababD; }
+            else if (currItem.isYogurt) { innerTitle = iconHtml + t.yogurtT; innerDesc = t.yogurtD; decisionReason = t.txtSafeButWash || t.yogurtD;}
+            else { innerTitle = iconHtml + t.blockT; innerDesc = t.blockD; decisionReason = t.blockD;}
         } else {
             box.className = 'air-wash'; iconHtml = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>`;
-            if (currItem.isFF) { innerTitle = iconHtml + t.ffT; innerDesc = t.ffD; } else { innerTitle = iconHtml + t.airT; innerDesc = t.airD; }
+            if (currItem.isFF) { innerTitle = iconHtml + t.ffT; innerDesc = t.ffD; decisionReason = t.txtAllSafeAir || t.ffD;} else { innerTitle = iconHtml + t.airT; innerDesc = t.airD; decisionReason = t.txtAllSafeAir || t.airD;}
         }
 
-        if (dangerAllergens.length > 0 && currItem.id !== nextItem.id) {
-            const mappedNames = dangerAllergens.map(a => t['al_name_' + a]).join('، ');
-            innerDesc += `<div class="allergen-warning"><strong><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='12'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg> ${t.warn_title}</strong> ${mappedNames}</div>`;
+        // بەشی بەراوردکردنی پێکهاتەکان (ئەگەر هەمان تام نەبێت)
+        if (currItem.id !== nextItem.id) {
+            const currTags = currItem.isFF ? `<span class="al-tag safe">${t.txtNoAllergens}</span>` : 
+                             (currAllergens.length > 0 ? currAllergens.map(a => `<span class="al-tag">${t['al_name_'+a]}</span>`).join('') : `<span class="al-tag safe">${t.txtNoAllergens}</span>`);
+                             
+            const nextTags = nextItem.isFF ? `<span class="al-tag safe">${t.txtNoAllergens}</span>` : 
+                             (nextAllergens.length > 0 ? nextAllergens.map(a => `<span class="al-tag">${t['al_name_'+a]}</span>`).join('') : `<span class="al-tag safe">${t.txtNoAllergens}</span>`);
+
+            let dangerMsg = "";
+            if (dangerAllergens.length > 0) {
+                const mappedNames = dangerAllergens.map(a => t['al_name_' + a]).join('، ');
+                dangerMsg = `<div class="allergen-warning"><strong><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><line x1='12' y1='8' x2='12' y2='12'></line><line x1='12' y1='16' x2='12.01' y2='16'></line></svg> ${t.warn_title}</strong> ${mappedNames}</div>`;
+            }
+
+            const compareBox = `
+            ${dangerMsg}
+            <div class="allergen-compare-box">
+                <div class="al-row">
+                    <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> ${t.lblCurrAl}</strong>
+                    <div class="flavor-name-display">${currItem.name[currentLang]}</div>
+                    <div class="al-tags">${currTags}</div>
+                </div>
+                <div class="al-row">
+                    <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ${t.lblNextAl}</strong>
+                    <div class="flavor-name-display">${nextItem.name[currentLang]}</div>
+                    <div class="al-tags">${nextTags}</div>
+                </div>
+                <div class="al-details">
+                    <strong>${t.lblDetails}</strong>
+                    <ul>
+                        <li>${decisionReason}</li>
+                    </ul>
+                </div>
+            </div>`;
+            
+            innerDesc += compareBox;
         }
+
         title.innerHTML = innerTitle; desc.innerHTML = innerDesc;
     }
 
