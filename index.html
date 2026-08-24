@@ -100,23 +100,6 @@
         [dir="rtl"] .allergen-warning { border-right: 4px solid var(--wash-full-border); }
         [dir="ltr"] .allergen-warning { border-left: 4px solid var(--wash-full-border); }
         .allergen-warning strong { font-size: 14.5px; display: flex; align-items: center; gap: 6px; }
-        .allergen-compare-box { margin-top: 25px; padding: 20px; background-color: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; box-shadow: var(--shadow-sm); }
-        .al-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .al-row:last-child { margin-bottom: 0; }
-        .al-row strong { font-size: 13.5px; color: var(--text-mute); display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
-        .flavor-name-display { font-size: 15px; font-weight: 800; color: var(--text-h); margin-bottom: 4px; }
-        .al-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-        .al-tag { background: var(--bg-body); padding: 6px 12px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); font-weight: 700; color: var(--text-h); }
-        .al-tag.safe { background: var(--wash-none-bg); color: var(--primary); border-color: var(--wash-none-border); }
-        .al-details { margin-top: 25px; font-size: 13.5px; border-top: 1px solid var(--border); padding-top: 20px; }
-        .al-details ul { margin: 10px 0 0 0; padding-inline-start: 20px; color: var(--text-p); }
-        .al-details li { margin-bottom: 8px; line-height: 1.7; }
-        .al-details li strong { color: var(--text-h); }
-        .alert-box { color: var(--text-h); font-weight: 700; margin-bottom: 15px; padding: 12px 15px; background: var(--bg-body); border-radius: 8px; box-shadow: var(--shadow-sm); }
-        [dir="rtl"] .alert-box.red { border-right: 3px solid var(--wash-full-border); border-left: none; }
-        [dir="ltr"] .alert-box.red { border-left: 3px solid var(--wash-full-border); border-right: none; }
-        [dir="rtl"] .alert-box.air { border-right: 3px solid var(--wash-air-border); border-left: none; }
-        [dir="ltr"] .alert-box.air { border-left: 3px solid var(--wash-air-border); border-right: none; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px; animation: fadeIn 0.2s ease-out; }
         .modal-box { background: var(--bg-surface); width: 100%; max-width: 550px; border-radius: 24px; padding: 30px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; position: relative; animation: slideDown 0.3s ease-out; }
@@ -150,7 +133,7 @@
         .legend-list li strong { color: var(--text-h); font-weight: 800; display: block; margin-bottom: 2px; }
 
         @media (max-width: 768px) { body { padding: 25px 15px; } .container { padding: 35px 25px; } .header-section { flex-direction: column; align-items: center; gap: 20px; text-align: center; } .brand-info h1 { justify-content: center; } .title-area { text-align: center; } [dir="ltr"] .title-area { text-align: center; } .controls { width: 100%; justify-content: center; } }
-        @media (max-width: 480px) { body { padding: 15px 10px; } .container { padding: 25px 15px; border-radius: 20px; } .brand-info h1 { font-size: 20px; } .brand-info span { font-size: 12px; } .icon-btn { width: 40px; height: 40px; font-size: 16px; } .title-area h2 { font-size: 18px; } .title-area p { font-size: 13.5px; } .lang-btn { padding: 8px; font-size: 13px; } select, input[type="text"], input[type="email"], input[type="password"] { padding: 14px 15px; font-size: 14px; } label { font-size: 13.5px; } .btn-check, .btn-primary { padding: 15px; font-size: 15px; } .btn-outline { padding: 14px; font-size: 14.5px; } #resultBox, .allergen-matrix-container, .legend-section { padding: 20px 15px; } .status-title { font-size: 17px; } .status-desc { font-size: 13.5px; } .allergen-warning strong { font-size: 13.5px; } .al-row strong { font-size: 12.5px; } .flavor-name-display { font-size: 14px; } .al-tag { font-size: 12px; padding: 5px 10px; } .modal-box { padding: 25px 15px; border-radius: 20px; } .modal-header h3 { font-size: 16px; } .checkbox-grid { grid-template-columns: 1fr; gap: 8px; } .matrix-grid { gap: 6px; } .m-item { padding: 8px 12px; font-size: 12px; flex: 1 1 calc(50% - 6px); text-align: center; } .legend-title { font-size: 16px; } .legend-list li { font-size: 13px; } }
+        @media (max-width: 480px) { body { padding: 15px 10px; } .container { padding: 25px 15px; border-radius: 20px; } .brand-info h1 { font-size: 20px; } .brand-info span { font-size: 12px; } .icon-btn { width: 40px; height: 40px; font-size: 16px; } .title-area h2 { font-size: 18px; } .title-area p { font-size: 13.5px; } .lang-btn { padding: 8px; font-size: 13px; } select, input[type="text"], input[type="email"], input[type="password"] { padding: 14px 15px; font-size: 14px; } label { font-size: 13.5px; } .btn-check, .btn-primary { padding: 15px; font-size: 15px; } .btn-outline { padding: 14px; font-size: 14.5px; } #resultBox, .allergen-matrix-container, .legend-section { padding: 20px 15px; } .status-title { font-size: 17px; } .status-desc { font-size: 13.5px; } .allergen-warning strong { font-size: 13.5px; } .modal-box { padding: 25px 15px; border-radius: 20px; } .modal-header h3 { font-size: 16px; } .checkbox-grid { grid-template-columns: 1fr; gap: 8px; } .matrix-grid { gap: 6px; } .m-item { padding: 8px 12px; font-size: 12px; flex: 1 1 calc(50% - 6px); text-align: center; } .legend-title { font-size: 16px; } .legend-list li { font-size: 13px; } }
         @media (max-width: 360px) { .m-item { flex: 1 1 100%; } .brand-info h1 { font-size: 18px; } }
     </style>
 </head>
@@ -391,7 +374,7 @@
         }
     }
 
-    // هەموو تامەکانی داتابەیس بە تەواوی دانراوەتەوە
+    // داتابەیسی سەرەتایی
     const defaultDatabase = [
         { groupName: "PC LAY'S", items: [
             { id: 0, name: {ku: "خوێ (Salt)", ar: "ملح (Salt)", en: "Salt"}, isFF: true, allergens: [] },
